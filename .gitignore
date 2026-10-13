@@ -1,0 +1,78 @@
+# ==========================================
+# 🛡️ CREDENTIALS & SENSITIVE FILES (CRITICAL)
+# ==========================================
+.env
+.env.*
+*.env
+secrets.toml
+*.pem
+*.key
+*.cert
+
+# ==========================================
+# 🐍 PYTHON SYSTEM & ENVIRONMENT
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==========================================
+# 📦 VIRTUAL ENVIRONMENTS
+# ==========================================
+.venv/
+venv/
+ENV/
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ==========================================
+# 📓 JUPYTER NOTEBOOKS (Prevents variable leak)
+# ==========================================
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+# Optional: Uncomment below if you want to completely block committing scratchpad notebooks
+# src/notebooks/testing.ipynb
+
+# ==========================================
+# 🦜 LANGGRAPH & DATABASE SYSTEM STATES
+# ==========================================
+# Blocks local SQLite database checkpointers if used for volatile memory saving
+*.db
+*.sqlite
+*.sqlite3
+.langgraph/
+
+# ==========================================
+# 👑 STREAMLIT CONFIG & RUNTIME
+# ==========================================
+.streamlit/config.toml
+.streamlit/secrets.toml
+
+# ==========================================
+# 💻 IDE & OPERATING SYSTEM
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
