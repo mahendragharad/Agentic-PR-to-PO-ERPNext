@@ -1,0 +1,12 @@
+[ 2026-10-13 00:21:56,560 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-13 00:21:56,752 ] 17 agent_system - INFO - --Initialize FastMCP Server--
+[ 2026-10-13 00:21:56,765 ] 26 agent_system - INFO - \U0001f9ec Dependency Initialization Block
+[ 2026-10-13 00:21:56,765 ] 27 agent_system - INFO - Wire up your working, production-ready core components
+[ 2026-10-13 00:21:56,766 ] 43 agent_system - INFO - Loaded active session state from disk cache.
+[ 2026-10-13 00:21:56,766 ] 16 agent_system - INFO - Seamless integration: Attach the auto-refreshing authorization engine
+[ 2026-10-13 00:21:56,852 ] 164 mcp.server.streamable_http_manager - INFO - StreamableHTTP session manager started
+[ 2026-10-13 00:22:31,384 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:22:31,389 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:22:31,393 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:22:31,394 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:29:27,006 ] 168 mcp.server.streamable_http_manager - INFO - StreamableHTTP session manager shutting down

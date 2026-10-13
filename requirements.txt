@@ -1,0 +1,12 @@
+ipykernel
+requests
+pydantic-settings
+pydantic
+FastMCP
+pytest
+langchain_mcp_adapters
+langgraph
+langchain
+langchain_openai
+langchain_openai
+Langfuse

@@ -1,0 +1,143 @@
+[ 2026-10-12 23:44:24,886 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-12 23:44:28,324 ] 18 agent_system - INFO - Successfully cached production prompts from Langfuse.
+[ 2026-10-12 23:44:28,381 ] 86 agent_system - INFO - Initializing production MCP HTTP Client and engines...
+[ 2026-10-12 23:44:28,382 ] 13 agent_system - INFO - \u23f3 Connecting to Streamable HTTP MCP server at /mcp...
+[ 2026-10-12 23:44:30,594 ] 99 agent_system - CRITICAL - Critical failure during MCP lifecycle initialization: unhandled errors in a TaskGroup (1 sub-exception)
+  + Exception Group Traceback (most recent call last):
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\api\main.py", line 89, in lifespan
+  |     live_mcp_tools = await run_mcp_http_agent()
+  |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\mcp_server\mcpClient.py", line 14, in run_mcp_http_agent
+  |     tools = await client.get_tools()
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_mcp_adapters\client.py", line 213, in get_tools
+  |     tools_list = await asyncio.gather(*load_mcp_tool_tasks)
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_mcp_adapters\tools.py", line 590, in load_mcp_tools
+  |     async with create_session(
+  |                ~~~~~~~~~~~~~~^
+  |         connection, mcp_callbacks=mcp_callbacks
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |     ) as tool_session:
+  |     ^
+  |   File "C:\Users\mahen\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_mcp_adapters\sessions.py", line 455, in create_session
+  |     async with _create_streamable_http_session(**params) as session:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  |   File "C:\Users\mahen\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_mcp_adapters\sessions.py", line 360, in _create_streamable_http_session
+  |     streamable_http_client(
+  |     ~~~~~~~~~~~~~~~~~~~~~~^
+  |         url,
+  |         ^^^^
+  |         http_client=client,
+  |         ^^^^^^^^^^^^^^^^^^^
+  |         terminate_on_close=terminate_on_close,
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |     ) as (read, write, _),
+  |     ^
+  |   File "C:\Users\mahen\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\mcp\client\streamable_http.py", line 672, in streamable_http_client
+  |     async with anyio.create_task_group() as tg:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\anyio\_backends\_asyncio.py", line 847, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    |     yield
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    |     resp = await self._pool.handle_async_request(req)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    |     raise exc from None
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    |     response = await connection.handle_async_request(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         pool_request.request
+    |         ^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_async\connection.py", line 101, in handle_async_request
+    |     raise exc
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_async\connection.py", line 78, in handle_async_request
+    |     stream = await self._connect(request)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_async\connection.py", line 124, in _connect
+    |     stream = await self._network_backend.connect_tcp(**kwargs)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_backends\auto.py", line 31, in connect_tcp
+    |     return await self._backend.connect_tcp(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<5 lines>...
+    |     )
+    |     ^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_backends\anyio.py", line 113, in connect_tcp
+    |     with map_exceptions(exc_map):
+    |          ~~~~~~~~~~~~~~^^^^^^^^^
+    |   File "C:\Users\mahen\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    |     raise to_exc(exc) from exc
+    | httpcore.ConnectError: All connection attempts failed
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\anyio\_core\_tasks.py", line 327, in _run_coro
+    |     retval = await self._coro
+    |              ^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\mcp\client\streamable_http.py", line 583, in handle_request_async
+    |     await self._handle_post_request(ctx)
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\mcp\client\streamable_http.py", line 361, in _handle_post_request
+    |     async with stream_within_origin(
+    |                ~~~~~~~~~~~~~~~~~~~~^
+    |         ctx.client,
+    |         ^^^^^^^^^^^
+    |     ...<3 lines>...
+    |         headers=headers,
+    |         ^^^^^^^^^^^^^^^^
+    |     ) as response:
+    |     ^
+    |   File "C:\Users\mahen\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 214, in __aenter__
+    |     return await anext(self.gen)
+    |            ^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\mcp\shared\_httpx_utils.py", line 132, in stream_within_origin
+    |     response = await client.send(request, stream=True, follow_redirects=False)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_client.py", line 1629, in send
+    |     response = await self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<4 lines>...
+    |     )
+    |     ^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    |     response = await self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    |     response = await self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    |     response = await transport.handle_async_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    |     with map_httpcore_exceptions():
+    |          ~~~~~~~~~~~~~~~~~~~~~~~^^
+    |   File "C:\Users\mahen\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    |     self.gen.throw(value)
+    |     ~~~~~~~~~~~~~~^^^^^^^
+    |   File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    |     raise mapped_exc(message) from exc
+    | httpx.ConnectError: All connection attempts failed
+    +------------------------------------
+[ 2026-10-12 23:44:30,606 ] 102 agent_system - INFO - Initiating teardown: Cleaning up application context and sockets...

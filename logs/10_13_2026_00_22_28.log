@@ -1,0 +1,28 @@
+[ 2026-10-13 00:22:28,072 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-13 00:22:31,113 ] 18 agent_system - INFO - Successfully cached production prompts from Langfuse.
+[ 2026-10-13 00:22:31,201 ] 86 agent_system - INFO - Initializing production MCP HTTP Client and engines...
+[ 2026-10-13 00:22:31,201 ] 13 agent_system - INFO - \u23f3 Connecting to Streamable HTTP MCP server at /mcp...
+[ 2026-10-13 00:22:31,384 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:22:31,395 ] 15 agent_system - INFO - \u2705 Successfully loaded 8
+[ 2026-10-13 00:22:31,413 ] 96 agent_system - INFO - Application state securely mounted. MCP Workflow ready.
+[ 2026-10-13 00:23:00,328 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:23:03,237 ] 148 agent_system - INFO - Orchestrator execution round completed in 2.01s
+[ 2026-10-13 00:23:05,212 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 0d8e99bb9025fc0412661861351eef73
+[ 2026-10-13 00:23:41,113 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_bd96ee06-2f66-4f30-b48a-1361a5b75e99
+[ 2026-10-13 00:23:41,114 ] 652 langfuse - WARNING - Propagated attribute 'metadata.structured_doc' value is over 200 characters (317 chars). Dropping value.
+[ 2026-10-13 00:23:42,865 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:23:44,851 ] 148 agent_system - INFO - Orchestrator execution round completed in 1.24s
+[ 2026-10-13 00:23:46,884 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: ccb43125fc3b24c3bab17d779bbeacf3
+[ 2026-10-13 00:24:10,198 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_bd96ee06-2f66-4f30-b48a-1361a5b75e99
+[ 2026-10-13 00:24:12,799 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:24:14,370 ] 148 agent_system - INFO - Orchestrator execution round completed in 0.85s
+[ 2026-10-13 00:24:16,278 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 69424e25ad3cdade80f2bdf013704675
+[ 2026-10-13 00:24:40,265 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_bd96ee06-2f66-4f30-b48a-1361a5b75e99
+[ 2026-10-13 00:24:42,073 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:24:44,917 ] 148 agent_system - INFO - Orchestrator execution round completed in 2.01s
+[ 2026-10-13 00:24:46,801 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 04ad9f516197fff9f52d31f74f50f1d4
+[ 2026-10-13 00:25:05,831 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_bd96ee06-2f66-4f30-b48a-1361a5b75e99
+[ 2026-10-13 00:25:07,809 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:25:10,518 ] 148 agent_system - INFO - Orchestrator execution round completed in 1.88s
+[ 2026-10-13 00:25:13,174 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: a00da90081445e57707d88a2454020c1
+[ 2026-10-13 00:25:47,111 ] 102 agent_system - INFO - Initiating teardown: Cleaning up application context and sockets...

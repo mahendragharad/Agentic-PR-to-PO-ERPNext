@@ -1,0 +1,83 @@
+[ 2026-10-13 00:12:11,935 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-13 00:12:14,975 ] 18 agent_system - INFO - Successfully cached production prompts from Langfuse.
+[ 2026-10-13 00:12:15,046 ] 86 agent_system - INFO - Initializing production MCP HTTP Client and engines...
+[ 2026-10-13 00:12:15,047 ] 13 agent_system - INFO - \u23f3 Connecting to Streamable HTTP MCP server at /mcp...
+[ 2026-10-13 00:12:15,279 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:12:15,296 ] 15 agent_system - INFO - \u2705 Successfully loaded 8
+[ 2026-10-13 00:12:15,328 ] 96 agent_system - INFO - Application state securely mounted. MCP Workflow ready.
+[ 2026-10-13 00:12:32,721 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:12:35,364 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 1 tools.
+[ 2026-10-13 00:12:37,569 ] 148 agent_system - INFO - Orchestrator execution round completed in 2.20s
+[ 2026-10-13 00:12:39,246 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 46db30f915aa6c6154195f91f565c270
+[ 2026-10-13 00:13:16,640 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_9af886e2-ca7f-4ded-bdae-e3241b492d78
+[ 2026-10-13 00:13:16,642 ] 652 langfuse - WARNING - Propagated attribute 'metadata.structured_doc' value is over 200 characters (292 chars). Dropping value.
+[ 2026-10-13 00:13:18,170 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:13:20,887 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 1 tools.
+[ 2026-10-13 00:13:22,516 ] 148 agent_system - INFO - Orchestrator execution round completed in 1.63s
+[ 2026-10-13 00:13:23,792 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: f2a3d7fe574698c3fc34a3d19dd36bf1
+[ 2026-10-13 00:14:20,395 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_9af886e2-ca7f-4ded-bdae-e3241b492d78
+[ 2026-10-13 00:14:22,116 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:14:26,338 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 0 tools.
+[ 2026-10-13 00:14:28,696 ] 148 agent_system - INFO - Orchestrator execution round completed in 2.36s
+[ 2026-10-13 00:14:28,698 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'generate_material_request', 'args': {'doc': {'company': "Maahi's Foundation", 'department': 'IT', 'items': [{'item_code': 'ITEM-001', 'qty': 100, 'rate': 100, 'schedule_date': '2026-12-20', 'uom': 'Nos'}], 'remark': 'Urgent Team Extension', 'schedule_date': '2026-12-20', 'title': 'Team Extension', 'transaction_date': '2026-12-12'}}, 'id': 'fc_ebd05227-7759-4f9a-8930-24ec2486b4ad', 'type': 'tool_call'}]
+[ 2026-10-13 00:14:28,896 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:14:31,006 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 0 tools.
+[ 2026-10-13 00:14:32,494 ] 148 agent_system - INFO - Orchestrator execution round completed in 1.49s
+[ 2026-10-13 00:14:34,560 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: fecd1c1a497836254f33f77020cedc3a
+[ 2026-10-13 00:14:51,974 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_9af886e2-ca7f-4ded-bdae-e3241b492d78
+[ 2026-10-13 00:14:53,614 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:14:57,134 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 0 tools.
+[ 2026-10-13 00:14:57,204 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 14.000000 seconds
+[ 2026-10-13 00:15:12,648 ] 148 agent_system - INFO - Orchestrator execution round completed in 15.51s
+[ 2026-10-13 00:15:12,651 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'generate_material_request', 'args': {'doc': {'company': "Maahi's Foudation", 'department': 'IT', 'doctype': 'Material Request', 'items': [{'item_code': 'ITEM-001', 'qty': 100, 'rate': 100, 'schedule_date': '2026-12-20', 'uom': 'Nos', 'warehouse': None}], 'material_request_type': 'Purchase', 'remark': 'Urgent Team Extension', 'schedule_date': '2026-12-20', 'set_warehouse': 'All Warehouses - MF', 'title': 'Team Extension', 'transaction_date': '2026-12-12'}}, 'id': 'fc_37f6c85a-4bdd-40d4-9ffe-2c35dc9304d3', 'type': 'tool_call'}]
+[ 2026-10-13 00:15:12,820 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:15:13,007 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 00:15:13,730 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 7.000000 seconds
+[ 2026-10-13 00:15:21,669 ] 73 agent_system - INFO - \U0001f3af Classifier determined query is conversational-only. Pruning down to 0 tools.
+[ 2026-10-13 00:15:21,740 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 23.000000 seconds
+[ 2026-10-13 00:15:46,372 ] 148 agent_system - INFO - Orchestrator execution round completed in 24.70s
+[ 2026-10-13 00:15:48,507 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 3d75d182a92d3479424cad0c01632c9f
+[ 2026-10-13 00:16:13,180 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_9af886e2-ca7f-4ded-bdae-e3241b492d78
+[ 2026-10-13 00:16:15,318 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:16:17,574 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 1 tools.
+[ 2026-10-13 00:16:17,645 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 6.000000 seconds
+[ 2026-10-13 00:16:25,237 ] 148 agent_system - INFO - Orchestrator execution round completed in 7.66s
+[ 2026-10-13 00:16:27,087 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: d034063cce985e497200aee786963121
+[ 2026-10-13 00:16:42,697 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_9af886e2-ca7f-4ded-bdae-e3241b492d78
+[ 2026-10-13 00:16:44,896 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:16:47,283 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 1 tools.
+[ 2026-10-13 00:16:47,356 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 3.000000 seconds
+[ 2026-10-13 00:16:51,105 ] 148 agent_system - INFO - Orchestrator execution round completed in 3.82s
+[ 2026-10-13 00:16:51,109 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'submit_material_request', 'args': {'material_request_id': 'MAT-MR-2026-00067'}, 'id': 'fc_5b443ccc-b83a-4833-a071-a3282aab75dd', 'type': 'tool_call'}]
+[ 2026-10-13 00:16:51,279 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:16:51,564 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 00:16:52,212 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 4.000000 seconds
+[ 2026-10-13 00:16:56,760 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 1 tools.
+[ 2026-10-13 00:16:56,849 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 23.000000 seconds
+[ 2026-10-13 00:17:20,764 ] 148 agent_system - INFO - Orchestrator execution round completed in 24.00s
+[ 2026-10-13 00:17:22,786 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: d9484f5a9aa201d4432ddab11cf27588
+[ 2026-10-13 00:17:57,147 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_9af886e2-ca7f-4ded-bdae-e3241b492d78
+[ 2026-10-13 00:18:00,313 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 00:18:02,962 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 0 tools.
+[ 2026-10-13 00:18:04,053 ] 148 agent_system - INFO - Orchestrator execution round completed in 1.09s
+[ 2026-10-13 00:18:04,056 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'convert_pr_to_draft_po', 'args': {'currency': 'INR', 'material_request_id': 'MAT-MR-2026-00067', 'supplier': 'Test Supplier APO'}, 'id': 'fc_b93ad02b-18ea-47fd-a8a9-d501415af22f', 'type': 'tool_call'}]
+[ 2026-10-13 00:18:04,255 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:18:04,308 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 00:18:05,960 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 0 tools.
+[ 2026-10-13 00:18:06,059 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 17.000000 seconds
+[ 2026-10-13 00:18:23,121 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 1.000000 seconds
+[ 2026-10-13 00:18:25,259 ] 148 agent_system - INFO - Orchestrator execution round completed in 19.30s
+[ 2026-10-13 00:18:25,261 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'get_material_request_details', 'args': {'material_request_id': 'MAT-MR-2026-00067'}, 'id': 'fc_f7342a78-ff7f-407b-89c4-947787ddf306', 'type': 'tool_call'}]
+[ 2026-10-13 00:18:25,579 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:18:25,649 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 00:18:26,602 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 4.000000 seconds
+[ 2026-10-13 00:18:32,128 ] 83 agent_system - INFO - \U0001f3af Successfully pruned tools array from 8 down to 0 tools.
+[ 2026-10-13 00:18:32,183 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 23.000000 seconds
+[ 2026-10-13 00:18:55,920 ] 148 agent_system - INFO - Orchestrator execution round completed in 23.79s
+[ 2026-10-13 00:18:55,925 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'convert_pr_to_draft_po', 'args': {'currency': 'INR', 'material_request_id': 'MAT-MR-2026-00067', 'supplier': 'Test Supplier APO'}, 'id': 'fc_b775f9b7-cd31-4b0b-b3c5-54b75ab60bc0', 'type': 'tool_call'}]
+[ 2026-10-13 00:18:56,119 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 00:18:56,173 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 00:18:56,884 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 6.000000 seconds
+[ 2026-10-13 00:19:03,818 ] 73 agent_system - INFO - \U0001f3af Classifier determined query is conversational-only. Pruning down to 0 tools.
+[ 2026-10-13 00:19:03,884 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 16.000000 seconds
+[ 2026-10-13 00:19:06,718 ] 102 agent_system - INFO - Initiating teardown: Cleaning up application context and sockets...

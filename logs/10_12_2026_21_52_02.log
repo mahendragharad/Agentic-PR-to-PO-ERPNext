@@ -1,0 +1,96 @@
+[ 2026-10-12 21:52:02,619 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-12 21:52:02,702 ] 17 agent_system - INFO - --Initialize FastMCP Server--
+[ 2026-10-12 21:52:02,711 ] 26 agent_system - INFO - \U0001f9ec Dependency Initialization Block
+[ 2026-10-12 21:52:02,711 ] 27 agent_system - INFO - Wire up your working, production-ready core components
+[ 2026-10-12 21:52:02,712 ] 43 agent_system - INFO - Loaded active session state from disk cache.
+[ 2026-10-12 21:52:02,712 ] 16 agent_system - INFO - Seamless integration: Attach the auto-refreshing authorization engine
+[ 2026-10-12 21:52:02,767 ] 164 mcp.server.streamable_http_manager - INFO - StreamableHTTP session manager started
+[ 2026-10-12 21:52:27,528 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:52:27,533 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:52:27,537 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-12 21:52:27,538 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:53:39,933 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:53:39,937 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:53:39,942 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-12 21:53:39,942 ] 65 agent_system - INFO - creating material request for with action generate_material_request
+[ 2026-10-12 21:53:39,942 ] 66 agent_system - INFO - MCP Tool Triggered: generate_material_request | Building PR for
+[ 2026-10-12 21:53:39,943 ] 86 agent_system - INFO - -- Payload validation completed to generate the Purchase / Material Request--
+[ 2026-10-12 21:53:39,943 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-12 21:53:39,943 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-12 21:53:39,943 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-12 21:53:39,943 ] 15 agent_system - INFO - r--- value -- OmHo85JvkHiGdVTrDuDTJtzVZtaMRT
+[ 2026-10-12 21:53:40,385 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:53:40,391 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-12 21:53:40,391 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:06,487 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:06,492 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:06,496 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-12 21:55:06,497 ] 138 agent_system - INFO - Let's validate the PR _id before submitting it : MAT-MR-2026-00065
+[ 2026-10-12 21:55:06,497 ] 139 agent_system - INFO - Retrieving current draft structure for document: MAT-MR-2026-00065
+[ 2026-10-12 21:55:06,497 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-12 21:55:06,497 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-12 21:55:06,497 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-12 21:55:06,497 ] 15 agent_system - INFO - r--- value -- OmHo85JvkHiGdVTrDuDTJtzVZtaMRT
+[ 2026-10-12 21:55:06,647 ] 160 agent_system - INFO - MCP Tool Triggered: submit_material_request | Submitting PR: MAT-MR-2026-00065
+[ 2026-10-12 21:55:06,647 ] 161 agent_system - INFO - Dispatching signed submission command payload to ERPNext for MAT-MR-2026-00065...
+[ 2026-10-12 21:55:06,647 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-12 21:55:06,647 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-12 21:55:06,647 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-12 21:55:06,647 ] 15 agent_system - INFO - r--- value -- OmHo85JvkHiGdVTrDuDTJtzVZtaMRT
+[ 2026-10-12 21:55:06,785 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:06,789 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-12 21:55:06,790 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:09,706 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:09,710 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:09,713 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-12 21:55:09,714 ] 195 agent_system - INFO - MCP Tool Triggered: convert_pr_to_draft_po | Target Source PR: MAT-MR-2026-00065
+[ 2026-10-12 21:55:09,714 ] 198 agent_system - INFO - Executing safety pre-flight check on document: MAT-MR-2026-00065
+[ 2026-10-12 21:55:09,714 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-12 21:55:09,714 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-12 21:55:09,714 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-12 21:55:09,714 ] 15 agent_system - INFO - r--- value -- OmHo85JvkHiGdVTrDuDTJtzVZtaMRT
+[ 2026-10-12 21:55:09,727 ] 216 agent_system - INFO - Extracting docstatus configuration flags
+[ 2026-10-12 21:55:09,727 ] 238 agent_system - WARNING - MCP convert_pr_to_draft_po Breakpoint Triggered: Transformation Blocked: The Material Request 'MAT-MR-2026-00065' is currently in a 'Draft' state (docstatus: 0). ERPNext backend mapping engines cannot convert unsubmitted resource documents.
+[ 2026-10-12 21:55:09,728 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:09,733 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-12 21:55:09,734 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:31,926 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:31,930 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:31,935 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-12 21:55:31,936 ] 501 agent_system - INFO - MCP Tool Triggered: purchase_request_details_retriever | Target Source PR: MAT-MR-2026-00065
+[ 2026-10-12 21:55:31,936 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-12 21:55:31,936 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-12 21:55:31,936 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-12 21:55:31,936 ] 15 agent_system - INFO - r--- value -- OmHo85JvkHiGdVTrDuDTJtzVZtaMRT
+[ 2026-10-12 21:55:31,970 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:55:31,975 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-12 21:55:31,975 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:56:02,050 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:56:02,056 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:56:02,062 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-12 21:56:02,062 ] 195 agent_system - INFO - MCP Tool Triggered: convert_pr_to_draft_po | Target Source PR: MAT-MR-2026-00065
+[ 2026-10-12 21:56:02,062 ] 198 agent_system - INFO - Executing safety pre-flight check on document: MAT-MR-2026-00065
+[ 2026-10-12 21:56:02,062 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-12 21:56:02,062 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-12 21:56:02,062 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-12 21:56:02,062 ] 15 agent_system - INFO - r--- value -- OmHo85JvkHiGdVTrDuDTJtzVZtaMRT
+[ 2026-10-12 21:56:02,092 ] 216 agent_system - INFO - Extracting docstatus configuration flags
+[ 2026-10-12 21:56:02,092 ] 238 agent_system - WARNING - MCP convert_pr_to_draft_po Breakpoint Triggered: Transformation Blocked: The Material Request 'MAT-MR-2026-00065' is currently in a 'Draft' state (docstatus: 0). ERPNext backend mapping engines cannot convert unsubmitted resource documents.
+[ 2026-10-12 21:56:02,096 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:56:02,102 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-12 21:56:02,103 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:57:28,685 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:57:28,707 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:57:28,729 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-12 21:57:28,730 ] 195 agent_system - INFO - MCP Tool Triggered: convert_pr_to_draft_po | Target Source PR: MAT-MR-2026-00065
+[ 2026-10-12 21:57:28,730 ] 198 agent_system - INFO - Executing safety pre-flight check on document: MAT-MR-2026-00065
+[ 2026-10-12 21:57:28,731 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-12 21:57:28,731 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-12 21:57:28,733 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-12 21:57:28,734 ] 15 agent_system - INFO - r--- value -- OmHo85JvkHiGdVTrDuDTJtzVZtaMRT
+[ 2026-10-12 21:57:28,793 ] 216 agent_system - INFO - Extracting docstatus configuration flags
+[ 2026-10-12 21:57:28,793 ] 238 agent_system - WARNING - MCP convert_pr_to_draft_po Breakpoint Triggered: Transformation Blocked: The Material Request 'MAT-MR-2026-00065' is currently in a 'Draft' state (docstatus: 0). ERPNext backend mapping engines cannot convert unsubmitted resource documents.
+[ 2026-10-12 21:57:28,799 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 21:57:28,817 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-12 21:57:28,822 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-12 22:17:27,074 ] 168 mcp.server.streamable_http_manager - INFO - StreamableHTTP session manager shutting down

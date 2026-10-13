@@ -1,0 +1,98 @@
+[ 2026-10-13 01:10:42,012 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-13 01:10:45,635 ] 14 agent_system - INFO - Successfully cached production prompts from Langfuse.
+[ 2026-10-13 01:10:45,747 ] 86 agent_system - INFO - Initializing production MCP HTTP Client and engines...
+[ 2026-10-13 01:10:45,747 ] 13 agent_system - INFO - \u23f3 Connecting to Streamable HTTP MCP server at /mcp...
+[ 2026-10-13 01:10:46,079 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:10:46,104 ] 15 agent_system - INFO - \u2705 Successfully loaded 8
+[ 2026-10-13 01:10:46,130 ] 96 agent_system - INFO - Application state securely mounted. MCP Workflow ready.
+[ 2026-10-13 01:11:21,971 ] 110 agent_system - INFO - \U0001f6e1\ufe0f Intent Classifier: Detected conversational turn. Deflecting payload to early exit lane.
+[ 2026-10-13 01:11:21,974 ] 97 agent_system - INFO - \u2728 Fallback path executed for node production_gateway. Flushing full message payload.
+[ 2026-10-13 01:11:24,541 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: a1010ff8669b1bcd867bb2815bffbe77
+[ 2026-10-13 01:12:04,776 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:12:07,164 ] 110 agent_system - INFO - \U0001f6e1\ufe0f Intent Classifier: Detected conversational turn. Deflecting payload to early exit lane.
+[ 2026-10-13 01:12:07,171 ] 97 agent_system - INFO - \u2728 Fallback path executed for node production_gateway. Flushing full message payload.
+[ 2026-10-13 01:12:09,195 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: fde8ec87aeffb30dfc3c4885ac31c388
+[ 2026-10-13 01:13:04,021 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:13:06,153 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:13:10,360 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 2.703s
+[ 2026-10-13 01:13:11,864 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: c309f8221a973ac3751f7ad406a63859
+[ 2026-10-13 01:14:52,316 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:14:52,318 ] 652 langfuse - WARNING - Propagated attribute 'metadata.structured_doc' value is over 200 characters (302 chars). Dropping value.
+[ 2026-10-13 01:14:54,579 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:14:58,967 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 2.795s
+[ 2026-10-13 01:15:01,232 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: bb1d4fcd68125fdba1c91aa917ff579e
+[ 2026-10-13 01:15:06,760 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:15:09,082 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:15:12,035 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 1.539s
+[ 2026-10-13 01:15:12,043 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'generate_material_request', 'args': {'doc': {'company': "Maahi's Foundation", 'department': 'IT', 'items': [{'item_code': 'ITEM-001', 'qty': 100, 'rate': 100, 'schedule_date': '2026-11-23', 'uom': 'Nos'}], 'material_request_type': 'Purchase', 'remark': 'Very urgent Team - 110', 'schedule_date': '2026-11-23', 'set_warehouse': 'All Warehouses - MF', 'title': 'urgent Team requirement', 'transaction_date': '2026-11-12'}}, 'id': 'fc_1ac167db-8d36-44f6-81a5-e05ba448bde9', 'type': 'tool_call'}]
+[ 2026-10-13 01:15:12,779 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:15:15,543 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 1.870s
+[ 2026-10-13 01:15:17,517 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: d167e52953eff6183917426ddfb871a8
+[ 2026-10-13 01:15:33,184 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:15:35,840 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:15:37,418 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 2.000000 seconds
+[ 2026-10-13 01:15:42,024 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 4.704s
+[ 2026-10-13 01:15:43,950 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 562ded84fb095d8024dbef624cf7d89e
+[ 2026-10-13 01:15:50,553 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:15:53,018 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:15:54,174 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 16.000000 seconds
+[ 2026-10-13 01:16:10,244 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 1.000000 seconds
+[ 2026-10-13 01:16:12,401 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 18.297s
+[ 2026-10-13 01:16:12,405 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'generate_material_request', 'args': {'doc': {'company': "Maahi's Foudation", 'department': 'IT', 'doctype': 'Material Request', 'items': [{'item_code': 'ITEM-001', 'qty': 100, 'rate': 100, 'schedule_date': '2026-11-23', 'uom': 'Nos', 'warehouse': None}], 'material_request_type': 'Purchase', 'remark': 'Very urgent Team - 110', 'schedule_date': '2026-11-23', 'set_warehouse': 'All Warehouses - MF', 'title': 'urgent Team requirement', 'transaction_date': '2026-11-12'}}, 'id': 'fc_139aa61f-bcfd-4a07-8ddc-733f9e8530fe', 'type': 'tool_call'}]
+[ 2026-10-13 01:16:12,625 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:16:12,932 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 01:16:13,780 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 14.000000 seconds
+[ 2026-10-13 01:16:29,297 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 15.808s
+[ 2026-10-13 01:16:32,151 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 877690c7311b7edfcf2a94118f3c9aa5
+[ 2026-10-13 01:16:46,116 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:16:48,551 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:16:49,989 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 1.000000 seconds
+[ 2026-10-13 01:16:52,122 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 2.198s
+[ 2026-10-13 01:16:56,633 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 149f8fafff7f288164ccdda36854ddf2
+[ 2026-10-13 01:17:29,889 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:17:32,023 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:17:33,983 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 1.402s
+[ 2026-10-13 01:17:37,683 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 3e71652afacf74e3550d10b1ef82e8d6
+[ 2026-10-13 01:18:01,575 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:18:03,607 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:18:05,973 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 0.783s
+[ 2026-10-13 01:18:05,983 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'submit_material_request', 'args': {'material_request_id': 'MAT-MR-2026-00067'}, 'id': 'fc_5bfe8373-6f46-4672-b621-f8a8f2cb3ebb', 'type': 'tool_call'}]
+[ 2026-10-13 01:18:06,987 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:18:07,421 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 01:18:09,387 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 0.767s
+[ 2026-10-13 01:18:09,393 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'convert_pr_to_draft_po', 'args': {'currency': 'INR', 'material_request_id': 'MAT-MR-2026-00067', 'supplier': 'Test Supplier API'}, 'id': 'fc_0e69f4db-5bcd-4de0-9e24-b5e0853d863d', 'type': 'tool_call'}]
+[ 2026-10-13 01:18:09,745 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:18:10,415 ] 178 agent_system - INFO - \U0001f511 Safe Node caught PR instantiation: MAT-MR-2026-00067
+[ 2026-10-13 01:18:12,175 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 1.227s
+[ 2026-10-13 01:18:17,235 ] 222 opentelemetry.exporter.otlp.proto.http.trace_exporter - ERROR - Failed to export spans batch due to timeout, max retries or shutdown.
+[ 2026-10-13 01:18:17,236 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 74d18bf30b7466e05428b9b683301dd0
+[ 2026-10-13 01:18:33,315 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:18:35,779 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:18:37,877 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 0.625s
+[ 2026-10-13 01:18:37,887 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'submit_purchase_order', 'args': {'purchase_order_id': 'PUR-ORD-2026-00019'}, 'id': 'fc_1a4f9a73-adcb-401a-8d89-69b621566fa2', 'type': 'tool_call'}]
+[ 2026-10-13 01:18:38,886 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:18:41,008 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 9.000000 seconds
+[ 2026-10-13 01:18:51,052 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 10.133s
+[ 2026-10-13 01:18:53,516 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 73669770242875eb7dbb8c3492c3e7fd
+[ 2026-10-13 01:19:01,646 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:19:04,054 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:19:04,651 ] 1068 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 4.000000 seconds
+[ 2026-10-13 01:19:10,023 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 5.470s
+[ 2026-10-13 01:19:12,912 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: c37797502ce76a5d4739eafee1b32b73
+[ 2026-10-13 01:19:39,184 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:19:41,284 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:19:43,495 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 0.858s
+[ 2026-10-13 01:19:43,507 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'cancel_purchase_order', 'args': {'purchase_order_id': 'PUR-ORD-2026-00019'}, 'id': 'fc_de197dbc-707b-48a3-8f1c-d915efe6bef8', 'type': 'tool_call'}]
+[ 2026-10-13 01:19:44,144 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:19:46,413 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 0.979s
+[ 2026-10-13 01:19:50,383 ] 213 opentelemetry.exporter.otlp.proto.http.trace_exporter - ERROR - Failed to export spans batch code: None, reason: HTTPSConnectionPool(host='us.cloud.langfuse.com', port=443): Read timed out. (read timeout=0.80701849819161)
+[ 2026-10-13 01:19:53,490 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: 2a486f616d6092ab15dd5117d466b592
+[ 2026-10-13 01:19:59,908 ] 59 agent_system - INFO - \U0001f504 Appending execution parameters to historical thread container context: st_session_0ce409e8-d81f-4153-805c-9064306465f7
+[ 2026-10-13 01:20:02,591 ] 116 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational sequence verified. Routing payload to Orchestrator.
+[ 2026-10-13 01:20:05,004 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 0.707s
+[ 2026-10-13 01:20:05,019 ] 32 agent_system - INFO - \U0001f3af Orchestrator routing to tool execution bridge for calls: [{'name': 'delete_purchase_order', 'args': {'purchase_order_id': 'PUR-ORD-2026-00019'}, 'id': 'fc_a3fa0dbf-93bc-4bbf-93b6-e28fb6ab2726', 'type': 'tool_call'}]
+[ 2026-10-13 01:20:05,911 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-13 01:20:07,816 ] 82 agent_system - INFO - \u26a1 High-Performance Orchestrator turn executed in 1.098s
+[ 2026-10-13 01:20:10,420 ] 213 opentelemetry.exporter.otlp.proto.http.trace_exporter - ERROR - Failed to export spans batch code: None, reason: HTTPSConnectionPool(host='us.cloud.langfuse.com', port=443): Read timed out. (read timeout=2.8202548576518893)
+[ 2026-10-13 01:20:15,435 ] 213 opentelemetry.exporter.otlp.proto.http.trace_exporter - ERROR - Failed to export spans batch code: None, reason: HTTPSConnectionPool(host='us.cloud.langfuse.com', port=443): Read timed out. (read timeout=0.25443327124230564)
+[ 2026-10-13 01:20:15,435 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: a4c572ede97ca787400f8e38e22f46d8

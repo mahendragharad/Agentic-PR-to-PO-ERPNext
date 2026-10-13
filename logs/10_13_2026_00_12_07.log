@@ -1,0 +1,111 @@
+[ 2026-10-13 00:12:07,586 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-13 00:12:07,660 ] 17 agent_system - INFO - --Initialize FastMCP Server--
+[ 2026-10-13 00:12:07,674 ] 26 agent_system - INFO - \U0001f9ec Dependency Initialization Block
+[ 2026-10-13 00:12:07,674 ] 27 agent_system - INFO - Wire up your working, production-ready core components
+[ 2026-10-13 00:12:07,693 ] 43 agent_system - INFO - Loaded active session state from disk cache.
+[ 2026-10-13 00:12:07,693 ] 16 agent_system - INFO - Seamless integration: Attach the auto-refreshing authorization engine
+[ 2026-10-13 00:12:07,801 ] 164 mcp.server.streamable_http_manager - INFO - StreamableHTTP session manager started
+[ 2026-10-13 00:12:15,278 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:12:15,286 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:12:15,293 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:12:15,294 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:14:28,895 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:14:28,900 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:14:28,905 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-13 00:14:28,906 ] 65 agent_system - INFO - creating material request for with action generate_material_request
+[ 2026-10-13 00:14:28,906 ] 66 agent_system - INFO - MCP Tool Triggered: generate_material_request | Building PR for
+[ 2026-10-13 00:14:28,906 ] 86 agent_system - INFO - -- Payload validation completed to generate the Purchase / Material Request--
+[ 2026-10-13 00:14:28,906 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-13 00:14:28,906 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-13 00:14:28,907 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-13 00:14:28,907 ] 15 agent_system - INFO - r--- value -- caqremULOpEjm6EtBubwR6IjVsg6EQ
+[ 2026-10-13 00:14:28,990 ] 120 agent_system - ERROR - MCP generate_material_request Error: ERPNext server rejected Purchase Request / Material Request validation criteria: ERPNext API returned unexpected error 417: {"exception":"frappe.exceptions.LinkValidationError: Could not find Company: Maahi's Foundation","exc_type":"LinkValidationError","exc":"[\"Traceback (most recent call last):\\n  File \\\"apps/frappe/frappe/app.py\\\", line 121, in application\\n    response = frappe.api.handle(request)\\n  File \\\"apps/frappe/frappe/api/__init__.py\\\", line 63, in handle\\n    data = endpoint(**arguments)\\n  File \\\"apps/frappe/frappe/api/v1.py\\\", line 41, in handle_rpc_call\\n    return frappe.handler.handle()\\n           ~~~~~~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/handler.py\\\", line 53, in handle\\n    data = execute_cmd(cmd)\\n  File \\\"apps/frappe/frappe/handler.py\\\", line 86, in execute_cmd\\n    return frappe.call(method, **frappe.form_dict)\\n           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"apps/frappe/frappe/__init__.py\\\", line 1147, in call\\n    return fn(*args, **newargs)\\n  File \\\"apps/frappe/frappe/utils/typing_validations.py\\\", line 36, in wrapper\\n    return func(*args, **kwargs)\\n  File \\\"apps/frappe/frappe/client.py\\\", line 228, in insert\\n    return insert_doc(doc).as_dict()\\n           ~~~~~~~~~~^^^^^\\n  File \\\"apps/frappe/frappe/client.py\\\", line 544, in insert_doc\\n    return frappe.get_doc(doc).insert()\\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/model/document.py\\\", line 477, in insert\\n    self._validate_links()\\n    ~~~~~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/model/document.py\\\", line 1219, in _validate_links\\n    frappe.throw(_(\\\"Could not find {0}\\\").format(msg), frappe.LinkValidationError)\\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"apps/frappe/frappe/utils/messages.py\\\", line 159, in throw\\n    msgprint(\\n    ~~~~~~~~^\\n    \\tmsg,\\n     ^^^^\\n    ...<7 lines>...\\n    \\tallow_dangerous_html=allow_dangerous_html,\\n     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n    )\\n    ^\\n  File \\\"apps/frappe/frappe/utils/messages.py\\\", line 118, in msgprint\\n    _raise_exception()\\n    ~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/utils/messages.py\\\", line 59, in _raise_exception\\n    raise exc\\nfrappe.exceptions.LinkValidationError: Could not find Company: Maahi's Foundation\\n\"]","_server_messages":"[\"{\\\"message\\\":\\\"Could not find Company: Maahi's Foundation\\\",\\\"as_table\\\":false,\\\"title\\\":\\\"Message\\\",\\\"indicator\\\":\\\"red\\\",\\\"raise_exception\\\":1,\\\"__frappe_exc_id\\\":\\\"9d2e07486a7e7dc0a43a98b7f1cc1e57a48982b0db43e5b13c7b6321\\\"}\"]"}
+Traceback (most recent call last):
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\erpnext_client\base_client.py", line 38, in request
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\requests\models.py", line 1167, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 417 Client Error: EXPECTATION FAILED for url: http://localhost:8080/api/method/frappe.client.insert
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\mcp_server\server.py", line 88, in generate_material_request
+    raw_response = client.request("POST", endpoint, json=validated_po_payload)
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\erpnext_client\base_client.py", line 45, in request
+    raise RuntimeError(f"ERPNext API returned unexpected error {response.status_code}: {response.text}") from e
+RuntimeError: ERPNext API returned unexpected error 417: {"exception":"frappe.exceptions.LinkValidationError: Could not find Company: Maahi's Foundation","exc_type":"LinkValidationError","exc":"[\"Traceback (most recent call last):\\n  File \\\"apps/frappe/frappe/app.py\\\", line 121, in application\\n    response = frappe.api.handle(request)\\n  File \\\"apps/frappe/frappe/api/__init__.py\\\", line 63, in handle\\n    data = endpoint(**arguments)\\n  File \\\"apps/frappe/frappe/api/v1.py\\\", line 41, in handle_rpc_call\\n    return frappe.handler.handle()\\n           ~~~~~~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/handler.py\\\", line 53, in handle\\n    data = execute_cmd(cmd)\\n  File \\\"apps/frappe/frappe/handler.py\\\", line 86, in execute_cmd\\n    return frappe.call(method, **frappe.form_dict)\\n           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"apps/frappe/frappe/__init__.py\\\", line 1147, in call\\n    return fn(*args, **newargs)\\n  File \\\"apps/frappe/frappe/utils/typing_validations.py\\\", line 36, in wrapper\\n    return func(*args, **kwargs)\\n  File \\\"apps/frappe/frappe/client.py\\\", line 228, in insert\\n    return insert_doc(doc).as_dict()\\n           ~~~~~~~~~~^^^^^\\n  File \\\"apps/frappe/frappe/client.py\\\", line 544, in insert_doc\\n    return frappe.get_doc(doc).insert()\\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/model/document.py\\\", line 477, in insert\\n    self._validate_links()\\n    ~~~~~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/model/document.py\\\", line 1219, in _validate_links\\n    frappe.throw(_(\\\"Could not find {0}\\\").format(msg), frappe.LinkValidationError)\\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"apps/frappe/frappe/utils/messages.py\\\", line 159, in throw\\n    msgprint(\\n    ~~~~~~~~^\\n    \\tmsg,\\n     ^^^^\\n    ...<7 lines>...\\n    \\tallow_dangerous_html=allow_dangerous_html,\\n     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n    )\\n    ^\\n  File \\\"apps/frappe/frappe/utils/messages.py\\\", line 118, in msgprint\\n    _raise_exception()\\n    ~~~~~~~~~~~~~~~~^^\\n  File \\\"apps/frappe/frappe/utils/messages.py\\\", line 59, in _raise_exception\\n    raise exc\\nfrappe.exceptions.LinkValidationError: Could not find Company: Maahi's Foundation\\n\"]","_server_messages":"[\"{\\\"message\\\":\\\"Could not find Company: Maahi's Foundation\\\",\\\"as_table\\\":false,\\\"title\\\":\\\"Message\\\",\\\"indicator\\\":\\\"red\\\",\\\"raise_exception\\\":1,\\\"__frappe_exc_id\\\":\\\"9d2e07486a7e7dc0a43a98b7f1cc1e57a48982b0db43e5b13c7b6321\\\"}\"]"}
+[ 2026-10-13 00:14:28,994 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:14:28,999 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:14:29,000 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:15:12,820 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:15:12,824 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:15:12,828 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-13 00:15:12,828 ] 65 agent_system - INFO - creating material request for with action generate_material_request
+[ 2026-10-13 00:15:12,828 ] 66 agent_system - INFO - MCP Tool Triggered: generate_material_request | Building PR for
+[ 2026-10-13 00:15:12,828 ] 86 agent_system - INFO - -- Payload validation completed to generate the Purchase / Material Request--
+[ 2026-10-13 00:15:12,828 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-13 00:15:12,828 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-13 00:15:12,829 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-13 00:15:12,829 ] 15 agent_system - INFO - r--- value -- caqremULOpEjm6EtBubwR6IjVsg6EQ
+[ 2026-10-13 00:15:12,997 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:15:13,003 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:15:13,004 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:16:51,279 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:16:51,283 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:16:51,286 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-13 00:16:51,287 ] 138 agent_system - INFO - Let's validate the PR _id before submitting it : MAT-MR-2026-00067
+[ 2026-10-13 00:16:51,287 ] 139 agent_system - INFO - Retrieving current draft structure for document: MAT-MR-2026-00067
+[ 2026-10-13 00:16:51,287 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-13 00:16:51,287 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-13 00:16:51,287 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-13 00:16:51,287 ] 15 agent_system - INFO - r--- value -- caqremULOpEjm6EtBubwR6IjVsg6EQ
+[ 2026-10-13 00:16:51,336 ] 160 agent_system - INFO - MCP Tool Triggered: submit_material_request | Submitting PR: MAT-MR-2026-00067
+[ 2026-10-13 00:16:51,336 ] 161 agent_system - INFO - Dispatching signed submission command payload to ERPNext for MAT-MR-2026-00067...
+[ 2026-10-13 00:16:51,336 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-13 00:16:51,336 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-13 00:16:51,336 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-13 00:16:51,336 ] 15 agent_system - INFO - r--- value -- caqremULOpEjm6EtBubwR6IjVsg6EQ
+[ 2026-10-13 00:16:51,556 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:16:51,561 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:16:51,561 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:04,254 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:04,260 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:04,267 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-13 00:18:04,267 ] 195 agent_system - INFO - MCP Tool Triggered: convert_pr_to_draft_po | Target Source PR: MAT-MR-2026-00067
+[ 2026-10-13 00:18:04,267 ] 198 agent_system - INFO - Executing safety pre-flight check on document: MAT-MR-2026-00067
+[ 2026-10-13 00:18:04,267 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-13 00:18:04,267 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-13 00:18:04,268 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-13 00:18:04,268 ] 15 agent_system - INFO - r--- value -- caqremULOpEjm6EtBubwR6IjVsg6EQ
+[ 2026-10-13 00:18:04,295 ] 216 agent_system - INFO - Extracting docstatus configuration flags
+[ 2026-10-13 00:18:04,295 ] 238 agent_system - WARNING - MCP convert_pr_to_draft_po Breakpoint Triggered: Transformation Blocked: The Material Request 'MAT-MR-2026-00067' is currently in a 'Draft' state (docstatus: 0). ERPNext backend mapping engines cannot convert unsubmitted resource documents.
+[ 2026-10-13 00:18:04,297 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:04,304 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:18:04,304 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:25,579 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:25,588 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:25,598 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-13 00:18:25,599 ] 501 agent_system - INFO - MCP Tool Triggered: purchase_request_details_retriever | Target Source PR: MAT-MR-2026-00067
+[ 2026-10-13 00:18:25,599 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-13 00:18:25,599 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-13 00:18:25,599 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-13 00:18:25,599 ] 15 agent_system - INFO - r--- value -- caqremULOpEjm6EtBubwR6IjVsg6EQ
+[ 2026-10-13 00:18:25,629 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:25,642 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:18:25,644 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:56,118 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:56,123 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:56,128 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+[ 2026-10-13 00:18:56,128 ] 195 agent_system - INFO - MCP Tool Triggered: convert_pr_to_draft_po | Target Source PR: MAT-MR-2026-00067
+[ 2026-10-13 00:18:56,128 ] 198 agent_system - INFO - Executing safety pre-flight check on document: MAT-MR-2026-00067
+[ 2026-10-13 00:18:56,128 ] 29 agent_system - INFO - -- creating the base URL to with endpoint to make the request --
+[ 2026-10-13 00:18:56,128 ] 36 agent_system - INFO - -- Testing the request --
+[ 2026-10-13 00:18:56,128 ] 11 agent_system - INFO - Accepting the valid token and creating authorization payload
+[ 2026-10-13 00:18:56,128 ] 15 agent_system - INFO - r--- value -- caqremULOpEjm6EtBubwR6IjVsg6EQ
+[ 2026-10-13 00:18:56,162 ] 216 agent_system - INFO - Extracting docstatus configuration flags
+[ 2026-10-13 00:18:56,162 ] 238 agent_system - WARNING - MCP convert_pr_to_draft_po Breakpoint Triggered: Transformation Blocked: The Material Request 'MAT-MR-2026-00067' is currently in a 'Draft' state (docstatus: 0). ERPNext backend mapping engines cannot convert unsubmitted resource documents.
+[ 2026-10-13 00:18:56,163 ] 831 mcp.server.streamable_http - INFO - Terminating session: None
+[ 2026-10-13 00:18:56,169 ] 733 mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+[ 2026-10-13 00:18:56,170 ] 831 mcp.server.streamable_http - INFO - Terminating session: None

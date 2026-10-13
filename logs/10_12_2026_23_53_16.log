@@ -1,0 +1,144 @@
+[ 2026-10-12 23:53:16,768 ] 27 agent_system - INFO - System Logger has been initialized successfully.
+[ 2026-10-12 23:53:21,106 ] 18 agent_system - INFO - Successfully cached production prompts from Langfuse.
+[ 2026-10-12 23:53:21,183 ] 28 agent_system - INFO - Initializing MCP HTTP Client and tools...
+[ 2026-10-12 23:53:21,183 ] 13 agent_system - INFO - \u23f3 Connecting to Streamable HTTP MCP server at /mcp...
+[ 2026-10-12 23:53:21,367 ] 219 mcp.client.streamable_http - INFO - Negotiated protocol version: 2025-11-25
+[ 2026-10-12 23:53:21,380 ] 15 agent_system - INFO - \u2705 Successfully loaded 8
+[ 2026-10-12 23:53:21,408 ] 34 agent_system - INFO - MCP Workflow compiled and ready for requests.
+[ 2026-10-12 23:53:39,920 ] 1600 groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 38.000000 seconds
+[ 2026-10-12 23:54:18,482 ] 125 agent_system - INFO - \U0001f3af Intent Classifier: Valid ERP operational transaction detected. Routing payload to Orchestrator.
+[ 2026-10-12 23:54:19,010 ] 160 agent_system - ERROR - Streaming Error on thread st_session_3269d3e2-53fc-4513-bdc9-07ebd69739f0: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4n96f25eycvv90pfv521c0v` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199488, Requested 1393. Please try again in 6m20.592s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\workflow\main.py", line 119, in event_stream_generator
+    async for event in workflow.astream_events(inputs, config=config, version="v2"):
+    ...<37 lines>...
+                        )
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\runnables\base.py", line 1670, in _astream_events_v1_v2
+    async for event in event_stream:
+        yield event
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\tracers\event_stream.py", line 1101, in _astream_events_implementation_v2
+    await task
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\tracers\event_stream.py", line 1056, in consume_astream
+    async for _ in event_streamer.tap_output_aiter(run_id, stream):
+        # All the content will be picked up
+        pass
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\tracers\event_stream.py", line 220, in tap_output_aiter
+    async for chunk in output:
+    ...<4 lines>...
+        yield chunk
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langgraph\pregel\main.py", line 3440, in astream
+    async for _ in runner.atick(
+    ...<16 lines>...
+            yield o
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langgraph\pregel\_runner.py", line 396, in atick
+    await arun_with_retry(
+    ...<15 lines>...
+    )
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langgraph\pregel\_retry.py", line 741, in arun_with_retry
+    async for _ in task.proc.astream(task.input, config):
+        pass
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langgraph\_internal\_runnable.py", line 890, in astream
+    output = await asyncio.create_task(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        _consume_aiter(aiterator), context=context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langgraph\_internal\_runnable.py", line 959, in _consume_aiter
+    async for chunk in it:
+    ...<8 lines>...
+            output = chunk
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\tracers\event_stream.py", line 197, in tap_output_aiter
+    first = await anext(output, sentinel)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\runnables\base.py", line 1830, in atransform
+    async for ichunk in input:
+    ...<14 lines>...
+                final = ichunk
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\runnables\base.py", line 1830, in atransform
+    async for ichunk in input:
+    ...<14 lines>...
+                final = ichunk
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\runnables\base.py", line 1234, in astream
+    yield await self.ainvoke(input, config, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langgraph\_internal\_runnable.py", line 522, in ainvoke
+    ret = await self.afunc(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\runnables\config.py", line 707, in run_in_executor
+    return await asyncio.get_running_loop().run_in_executor(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\mahen\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\runnables\config.py", line 698, in wrapper
+    return func(*args, **kwargs)
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\workflow\agent_workflow.py", line 82, in <lambda>
+    lambda state, config: orchestrator_agent_node(state, config),
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\src\agents\supervisor.py", line 128, in orchestrator_agent_node
+    ai_message = llm_with_mcp_tools.invoke(
+        active_payload_messages,
+        config={"callbacks": config.get("callbacks", [])}
+    )
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\runnables\base.py", line 6014, in invoke
+    return self.bound.invoke(
+           ~~~~~~~~~~~~~~~~~^
+        input,
+        ^^^^^^
+        self._merge_configs(config),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **{**self.kwargs, **kwargs},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\language_models\chat_models.py", line 488, in invoke
+    self.generate_prompt(
+    ~~~~~~~~~~~~~~~~~~~~^
+        [self._convert_input(input)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ).generations[0][0],
+    ^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1877, in generate_prompt
+    return self.generate(prompt_messages, stop=stop, callbacks=callbacks, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1684, in generate
+    self._generate_with_cache(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        m,
+        ^^
+    ...<2 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1981, in _generate_with_cache
+    for chunk in self._stream(messages, stop=stop, **kwargs):
+                 ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\langchain_groq\chat_models.py", line 663, in _stream
+    for chunk in self.client.create(messages=message_dicts, **params):
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\groq\resources\chat\completions.py", line 461, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/openai/v1/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<45 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\groq\_base_client.py", line 1242, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI-Restart-2026\Industry Level Agentic AI Projects - 26-July-2026\PR-TO-PO-Complete-AgenticAI-Systen\PR_To_PO_AgenticApp_ENV\Lib\site-packages\groq\_base_client.py", line 1044, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4n96f25eycvv90pfv521c0v` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199488, Requested 1393. Please try again in 6m20.592s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+During task with name 'orchestrator' and id 'bc71765e-a441-c083-2299-c46dad970f5a'
+[ 2026-10-12 23:54:20,433 ] 57 mcp_agent_evaluator - INFO - \u2705 Telemetry evaluation matrices posted successfully for trace: d86400e3be7dfc6a8ff2c0d4c423a790
+[ 2026-10-12 23:54:20,541 ] 40 agent_system - INFO - Cleaning up MCP Application context and resources...
