@@ -35,12 +35,13 @@ async def lifespan(app: FastAPI):
         env_context = os.environ.copy()
         env_context["PYTHONIOENCODING"] = "utf-8"
         env_context["PYTHONUTF8"] = "1"
-        
+
         mcp_process = subprocess.Popen(
             [sys.executable, "-m", "src.mcp_server.server"],
             cwd=project_root,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            env=env_context,
         )
 
         # Give the background server process 3 seconds to establish sockets cleanly
