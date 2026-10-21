@@ -18,6 +18,37 @@ from src.api.routes.login import user_router
 # Initialize external tracking clients
 langfuse_client = get_client()
 
+
+async def _wait_for_mcp_server(process: subprocess.Popen, timeout: float = 30.0) -> None:
+    loop = asyncio.get_running_loop()
+    deadline = loop.time() + timeout
+    last_error = None
+
+    while loop.time() < deadline:
+        if process.poll() is not None:
+            raise RuntimeError(
+                f"MCP Server exited during startup with code {process.returncode}. "
+                "Check the MCP Server output above for its startup error."
+            )
+
+        try:
+            _, writer = await asyncio.wait_for(
+                asyncio.open_connection("127.0.0.1", 8000),
+                timeout=1.0,
+            )
+            writer.close()
+            await writer.wait_closed()
+            return
+        except (OSError, asyncio.TimeoutError) as exc:
+            last_error = exc
+            await asyncio.sleep(0.25)
+
+    raise RuntimeError(
+        f"MCP Server did not accept connections on 127.0.0.1:8000 "
+        f"within {timeout:.0f} seconds. Last connection error: {last_error}"
+    )
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Declare globally at the start of the lifespan scope to prevent UnboundLocal errors
@@ -30,7 +61,7 @@ async def lifespan(app: FastAPI):
         project_root = Path(__file__).resolve().parents[2]
         logger.info(f"Resolved MCP Server path target: {project_root}")
         
-        logger.info("Launching background MCP Server process explicitly on Port 8001...")
+        logger.info("Launching background MCP Server process on port 8000...")
 
         env_context = os.environ.copy()
         env_context["PYTHONIOENCODING"] = "utf-8"
@@ -39,20 +70,14 @@ async def lifespan(app: FastAPI):
         mcp_process = subprocess.Popen(
             [sys.executable, "-m", "src.mcp_server.server"],
             cwd=project_root,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stdout=None,
+            stderr=None,
             env=env_context,
         )
 
-        # Give the background server process 3 seconds to establish sockets cleanly
-        await asyncio.sleep(3)
-        
-        # Check if process died immediately on boot (e.g. file path errors)
-        if mcp_process.poll() is not None:
-            stdout, stderr = mcp_process.communicate()
-            raise RuntimeError(f"MCP Server exited immediately with code {mcp_process.returncode}. Stderr: {stderr.decode()}")
+        await _wait_for_mcp_server(mcp_process)
             
-        logger.info("MCP Server background process successfully launched on port 8001.")
+        logger.info("MCP Server is accepting connections on port 8000.")
 
         # Trigger client orchestration handshake
         live_mcp_tools = await run_mcp_http_agent()
@@ -105,6 +130,6 @@ app.include_router(router=user_router, prefix="/api/v2")
 
 if __name__ == "__main__":
     import uvicorn
-    # FIX 2: Read Render's assigned $PORT variable, fallback to 8000 for local testing
+    # Read Render's assigned $PORT variable, fallback to 8001 for local testing.
     port_assignment = int(os.environ.get("PORT", 8001))
     uvicorn.run("src.api.main:app", host="0.0.0.0", port=port_assignment, reload=False)
