@@ -1,16 +1,174 @@
 import re
 import json
 import logging
+import hashlib
+import uuid
+import copy
+from datetime import datetime, timezone
 from typing import Dict, Any, List
 from pydantic import ValidationError
+from langgraph.errors import GraphInterrupt
 from langgraph.runtime import Runtime
 from langgraph.prebuilt import ToolNode
+from langgraph.types import interrupt
 from config.logging_config import logger
 from langchain_core.messages import AIMessage, ToolMessage
+from langchain_core.runnables import RunnableConfig 
 from src.erpnext_client.pyload_schemas import CreateMaterialRequestInput, ConvertPRToPOInput, Purchase_Order_Id_Validator, Material_Request_Id_Validator, MaterialRequestDocSchema
 from utils.cleaner import extract_tool_text, parse_tool_response, clean_mcp_error, clean_last_response
 from langfuse import Langfuse
 from config.settings import settings
+
+PO_APPROVAL_TOOLS = {"convert_pr_to_draft_po", "submit_purchase_order"}
+ERPNEXT_TOOLS = {
+    "generate_material_request",
+    "submit_material_request",
+    "convert_pr_to_draft_po",
+    "submit_purchase_order",
+    "cancel_purchase_order",
+    "delete_purchase_order",
+    "get_material_request_details",
+    "get_purchase_order_details",
+}
+
+
+def _remove_untrusted_session_args(tool_calls: List[Dict[str, Any]]) -> None:
+    for call in tool_calls:
+        call_args = call.get("args")
+        if isinstance(call_args, dict):
+            call_args.pop("erpnext_sid", None)
+
+
+def _authenticated_execution_state(
+    state: Dict[str, Any],
+    messages: List[Any],
+    last_message: AIMessage,
+    tool_call_id: str,
+    normalized_args: Dict[str, Any],
+    erpnext_sid: str,
+) -> Dict[str, Any]:
+    execution_state = dict(state)
+    execution_messages = list(messages)
+    execution_message = copy.deepcopy(last_message)
+
+    for execution_call in execution_message.tool_calls:
+        execution_call_args = execution_call.get("args", {})
+        if not isinstance(execution_call_args, dict):
+            execution_call_args = {}
+        else:
+            execution_call_args = dict(execution_call_args)
+        execution_call_args.pop("erpnext_sid", None)
+
+        if execution_call["id"] == tool_call_id:
+            execution_call_args = dict(normalized_args)
+
+        execution_call["args"] = execution_call_args
+        if execution_call["name"] in ERPNEXT_TOOLS:
+            execution_call["args"]["erpnext_sid"] = erpnext_sid
+
+    execution_messages[-1] = execution_message
+    execution_state["messages"] = execution_messages
+    return execution_state
+
+
+def _parse_approval_tool_response(raw_result: Any, tool_name: str) -> Dict[str, Any]:
+    result = parse_tool_response(raw_result)
+    if str(result.get("status", "")).upper() != "SUCCESS":
+        error = result.get("error")
+        message = error.get("message") if isinstance(error, dict) else error
+        raise RuntimeError(
+            f"Could not load review details for {tool_name}: "
+            f"{message or 'ERPNext returned an error.'}"
+        )
+
+    payload = result.get("payload")
+    if not isinstance(payload, dict):
+        raise RuntimeError(f"ERPNext returned invalid review details for {tool_name}.")
+    return payload
+
+
+async def _get_po_approval_request(
+    tool_name: str,
+    args: Dict[str, Any],
+    thread_id: str,
+    tool_call_id: str,
+    mcp_tools: list,
+    erpnext_sid: str,
+) -> Dict[str, Any]:
+    if tool_name == "convert_pr_to_draft_po":
+        document_id = args["material_request_id"]
+        document_type = "Material Request"
+        reader_name = "get_material_request_details"
+        reader_args = {"material_request_id": document_id}
+    else:
+        document_id = args["purchase_order_id"]
+        document_type = "Purchase Order"
+        reader_name = "get_purchase_order_details"
+        reader_args = {"purchase_order_id": document_id}
+
+    reader = next((tool for tool in mcp_tools if tool.name == reader_name), None)
+    if reader is None:
+        raise RuntimeError(f"Required read-only MCP tool '{reader_name}' is unavailable.")
+
+    document = _parse_approval_tool_response(
+        await reader.ainvoke({**reader_args, "erpnext_sid": erpnext_sid}),
+        reader_name,
+    )
+    if document.get("name") != document_id:
+        raise RuntimeError(
+            f"ERPNext returned a different {document_type} than the one requested."
+        )
+    if not isinstance(document.get("items"), list) or not document["items"]:
+        raise RuntimeError(f"{document_type} '{document_id}' has no reviewable line items.")
+
+    if tool_name == "convert_pr_to_draft_po":
+        if document.get("docstatus") != 1 or document.get("status") == "Ordered":
+            raise RuntimeError(
+                f"Material Request '{document_id}' is no longer eligible for conversion."
+            )
+        preview = {
+            "document": document,
+            "conversion": {
+                "supplier": args["supplier"],
+                "currency": args.get("currency", "INR"),
+            },
+        }
+        action_label = "Create draft purchase order"
+    else:
+        if document.get("docstatus") != 0:
+            raise RuntimeError(
+                f"Purchase Order '{document_id}' is not a draft and cannot be submitted."
+            )
+        preview = {"document": document}
+        action_label = "Submit purchase order"
+
+    canonical_preview = json.dumps(
+        preview,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=str,
+    )
+    preview_hash = hashlib.sha256(canonical_preview.encode("utf-8")).hexdigest()
+    approval_id = str(
+        uuid.uuid5(
+            uuid.NAMESPACE_URL,
+            f"pr-to-po:{thread_id}:{tool_call_id}:{preview_hash}",
+        )
+    )
+
+    return {
+        "approval_id": approval_id,
+        "tool_name": tool_name,
+        "tool_call_id": tool_call_id,
+        "thread_id": thread_id,
+        "document_type": document_type,
+        "document_id": document_id,
+        "action_label": action_label,
+        "preview": preview,
+        "preview_hash": preview_hash,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
 
 langfuse_client = Langfuse(
     public_key=settings.LANGFUSE_PUBLIC_KEY,
@@ -48,7 +206,7 @@ def create_safe_mcp_execution_node(mcp_tools: list):
     notebook_tools = list(mcp_tools)
     underlying_tool_node = ToolNode(notebook_tools)
     
-    async def safe_execution_node(state: dict) -> dict:
+    async def safe_execution_node(state: dict, config: RunnableConfig) -> dict:
         print("\n" + "═"*80)
         print(" 🚀 STARTING SAFE MCP EXECUTION GATEWAY")
         print("═"*80)
@@ -66,9 +224,16 @@ def create_safe_mcp_execution_node(mcp_tools: list):
             print("ℹ️ [Execution Bridge Bypassed]: Last message does not contain executable tool calls.")
             return {"messages": []}
             
-        tool_call = last_message.tool_calls[0] if isinstance(last_message.tool_calls, list) else last_message.tool_calls
+        tool_calls = last_message.tool_calls
+        _remove_untrusted_session_args(tool_calls)
+
+        tool_call = tool_calls[0] if isinstance(tool_calls, list) else tool_calls
         tool_name = tool_call["name"]
         tool_call_id = tool_call["id"]
+        protected_calls = [
+            call for call in tool_calls
+            if call.get("name") in PO_APPROVAL_TOOLS
+        ]
         
         print(f"🎯 [Target Tool Detected]: {tool_name}")
         
@@ -95,10 +260,11 @@ def create_safe_mcp_execution_node(mcp_tools: list):
         # =====================================================================
         if "ctx" in normalized_args and isinstance(normalized_args["ctx"], dict):
             normalized_args = normalized_args["ctx"]
-            tool_call["args"] = normalized_args
         elif "payload" in normalized_args and isinstance(normalized_args["payload"], dict):
             normalized_args = normalized_args["payload"]
-            tool_call["args"] = normalized_args
+
+        # Session credentials come only from the authenticated request context.
+        normalized_args.pop("erpnext_sid", None)
 
         # =====================================================================
         # STEP B: PRE-NETWORK LOCAL PYDANTIC CONTRACT VALIDATION
@@ -109,7 +275,7 @@ def create_safe_mcp_execution_node(mcp_tools: list):
             if tool_name == "generate_material_request":
                 raw_doc_payload = normalized_args.get("doc", normalized_args)
                 validated_doc_model = MaterialRequestDocSchema.model_validate(raw_doc_payload)
-                tool_call["args"] = {"doc": validated_doc_model.model_dump()}
+                normalized_args = {"doc": validated_doc_model.model_dump()}
 
             elif tool_name in ["submit_material_request", "get_material_request_details"]:
                 Material_Request_Id_Validator.model_validate(normalized_args)
@@ -118,7 +284,9 @@ def create_safe_mcp_execution_node(mcp_tools: list):
                 Purchase_Order_Id_Validator.model_validate(normalized_args)
                 
             elif tool_name == "convert_pr_to_draft_po":
-                ConvertPRToPOInput.model_validate(normalized_args)
+                normalized_args = ConvertPRToPOInput.model_validate(
+                    normalized_args
+                ).model_dump()
             else:
                 target_tool = next((t for t in mcp_tools if t.name == tool_name), None)
                 if target_tool and hasattr(target_tool, "args_schema") and target_tool.args_schema:
@@ -126,8 +294,97 @@ def create_safe_mcp_execution_node(mcp_tools: list):
 
             print(f"🎉 SUCCESS: Validation pipeline completed perfectly for tool: [{tool_name}]. Sending to execution network.")
 
+            if protected_calls and len(tool_calls) != 1:
+                return {
+                    "messages": [
+                        ToolMessage(
+                            content=(
+                                "Purchase-order approval actions must be requested one at a time. "
+                                "No tool in this request was executed."
+                            ),
+                            tool_call_id=call["id"],
+                        )
+                        for call in tool_calls
+                    ],
+                    "last_error_context": None,
+                }
+
+            if tool_name in PO_APPROVAL_TOOLS:
+                thread_id = config.get("configurable", {}).get("thread_id")
+                if not thread_id:
+                    raise RuntimeError("A thread ID is required for purchase-order approval.")
+                erpnext_sid = config.get("configurable", {}).get("erpnext_sid")
+                if not erpnext_sid:
+                    raise RuntimeError("An authenticated ERPNext session is required.")
+
+                approval_request = await _get_po_approval_request(
+                    tool_name=tool_name,
+                    args=normalized_args,
+                    thread_id=thread_id,
+                    tool_call_id=tool_call_id,
+                    mcp_tools=mcp_tools,
+                    erpnext_sid=erpnext_sid,
+                )
+                logger.info(
+                    "Purchase-order approval requested: tool=%s document=%s approval_id=%s",
+                    tool_name,
+                    approval_request["document_id"],
+                    approval_request["approval_id"],
+                )
+                decision = interrupt(approval_request)
+                if (
+                    not isinstance(decision, dict)
+                    or decision.get("approval_id") != approval_request["approval_id"]
+                    or decision.get("preview_hash") != approval_request["preview_hash"]
+                ):
+                    result_code = "STALE_REVIEW"
+                    result_text = (
+                        "The reviewed document changed after it was displayed. "
+                        "No purchase-order action was performed; request a fresh review."
+                    )
+                elif decision.get("decision") != "approved":
+                    result_code = "REJECTED"
+                    result_text = "The user rejected this purchase-order action. No action was performed."
+                else:
+                    result_code = None
+                    result_text = ""
+
+                if result_code:
+                    return {
+                        "messages": [
+                            ToolMessage(
+                                content=json.dumps(
+                                    {"status": result_code, "message": result_text}
+                                ),
+                                tool_call_id=tool_call_id,
+                            )
+                        ],
+                        "last_error_context": None,
+                    }
+
+            # Inject the user's ERPNext session only into the isolated execution copy.
+            execution_state = state
+            if any(
+                call.get("name") in ERPNEXT_TOOLS
+                for call in last_message.tool_calls
+            ):
+                erpnext_sid = config.get("configurable", {}).get("erpnext_sid")
+                if not erpnext_sid:
+                    raise RuntimeError("An authenticated ERPNext session is required.")
+                execution_state = _authenticated_execution_state(
+                    state=state,
+                    messages=messages,
+                    last_message=last_message,
+                    tool_call_id=tool_call_id,
+                    normalized_args=normalized_args,
+                    erpnext_sid=erpnext_sid,
+                )
+
             # 2. Execute underlying node over the infrastructure network
-            base_output = await underlying_tool_node.ainvoke(state, runtime=Runtime())
+            base_output = await underlying_tool_node.ainvoke(
+                execution_state,
+                runtime=Runtime(),
+            )
             emitted_messages = base_output.get("messages", [])
 
             if not emitted_messages:
@@ -137,9 +394,11 @@ def create_safe_mcp_execution_node(mcp_tools: list):
             last_res = emitted_messages[-1]
             
             # Apply token payload compression guardrails before appending to history state
-            last_res.content = truncate_erpnext_payload(last_res.content)
+            last_res.content = truncate_erpnext_payload(
+                extract_tool_text(last_res.content)
+            )
             
-            tool_response = clean_last_response(last_res.content)
+            tool_response = parse_tool_response(last_res.content)
             status = str(tool_response.get("status", "")).upper()
             mcp_error = tool_response.get("error")
 
@@ -197,6 +456,9 @@ def create_safe_mcp_execution_node(mcp_tools: list):
         # =====================================================================
         # STEP C: PRODUCTION COMPREHENSIVE EXCEPTION CATCHING & STRINGIFICATION
         # =====================================================================
+        except GraphInterrupt:
+            raise
+
         except ValidationError as val_err:
             retry_counter[tool_name] += 1
             error_payload = {

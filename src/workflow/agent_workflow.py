@@ -1,5 +1,6 @@
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
+from langchain_core.runnables import RunnableConfig 
 
 from src.agent_router.router import (
     execution_conditional_router,
@@ -22,10 +23,7 @@ def compile_production_mcp_workflow(live_tools: list):
     # --- NODE INJECTION & SYSTEM REGISTRATION ---
     workflow.add_node("production_gateway", production_gateway_classifier_node)
     
-    workflow.add_node(
-        "orchestrator",
-        lambda state, config: orchestrator_agent_node(state, config),
-    )
+    workflow.add_node("orchestrator", orchestrator_agent_node)
     
     workflow.add_node(
         "mcp_execution_bridge",
@@ -68,5 +66,6 @@ def compile_production_mcp_workflow(live_tools: list):
         },
     )
 
-    # --- COMPILATION WITH PERSISTENT VOLATILE CHECKPOINTER ---
+    # MemorySaver is process-local: pending approvals are lost on restart and
+    # are not shared across API workers. Replace with a durable saver for production.
     return workflow.compile(checkpointer=MemorySaver())

@@ -4,10 +4,13 @@
 .env
 .env.*
 *.env
+!.env.example
+!.env.template
 secrets.toml
 *.pem
 *.key
 *.cert
+tokens.json
 
 # ==========================================
 # 🐍 PYTHON SYSTEM & ENVIRONMENT
@@ -41,6 +44,7 @@ MANIFEST
 venv/
 ENV/
 env/
+PR_To_PO_AgenticApp_ENV/
 pip-log.txt
 pip-delete-this-directory.txt
 
@@ -53,6 +57,17 @@ pip-delete-this-directory.txt
 # src/notebooks/testing.ipynb
 
 # ==========================================
+# 🧪 TEST & TOOL CACHES
+# ==========================================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+
+# ==========================================
 # 🦜 LANGGRAPH & DATABASE SYSTEM STATES
 # ==========================================
 # Blocks local SQLite database checkpointers if used for volatile memory saving
@@ -60,6 +75,11 @@ pip-delete-this-directory.txt
 *.sqlite
 *.sqlite3
 .langgraph/
+
+# ==========================================
+# 📝 RUNTIME LOGS
+# ==========================================
+*.log
 
 # ==========================================
 # 👑 STREAMLIT CONFIG & RUNTIME

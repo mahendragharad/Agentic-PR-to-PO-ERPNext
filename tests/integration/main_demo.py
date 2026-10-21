@@ -57,9 +57,13 @@ async def main():
     }
 
     # Execute the Orchestrator node directly in isolation
-    node_output = orchestrator_agent_node(test_state, config=test_config)
+    node_output = await orchestrator_agent_node(test_state, config=test_config)
 
-    tool_output = retrieve_relevant_tool_definitions(user_query=user_query, all_mcp_tools=live_mcp_tools)
+    tool_output = await retrieve_relevant_tool_definitions(
+        user_query=user_query,
+        all_mcp_tools=live_mcp_tools,
+        config=test_config,
+    )
 
     print(tool_output)
         

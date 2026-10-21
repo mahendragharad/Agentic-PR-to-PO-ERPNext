@@ -8,6 +8,7 @@ from config.logging_config import logger
 from src.api.endpoint_schemas import ChatRequest
 from langchain_core.messages import HumanMessage, AIMessage
 from pydantic import BaseModel, Field
+from src.workflow.hitl_manager import get_pending_approval
 
 from langfuse import get_client
 from langfuse.langchain import CallbackHandler
@@ -16,7 +17,12 @@ from src.observbility.evaluators import ProductionAgentEvaluator
 langfuse_client = get_client()
 
 # 🚀 PRODUCTION STANDARD: Pure functional generator decoupled from global variable states.
-async def event_stream_generator(payload: ChatRequest, workflow: Any, live_mcp_tools: List[Any]):   
+async def event_stream_generator(
+    payload: ChatRequest,
+    workflow: Any,
+    live_mcp_tools: List[Any],
+    erpnext_sid: Optional[str] = None,
+):
     start_execution_timestamp = time.time()
     target_trace_id = str(uuid.uuid4())
     langfuse_handler = CallbackHandler()
@@ -34,6 +40,7 @@ async def event_stream_generator(payload: ChatRequest, workflow: Any, live_mcp_t
         "configurable": {
             "thread_id": payload.thread_id,
             "tools": live_mcp_tools,
+            "erpnext_sid": erpnext_sid,
         },
     }
 
@@ -96,6 +103,18 @@ async def event_stream_generator(payload: ChatRequest, workflow: Any, live_mcp_t
                         if isinstance(content, str) and content.strip():
                             logger.info(f"✨ Fallback path executed for node {event.get('name')}. Flushing full message payload.")
                             yield f"data: {json.dumps({'type': 'token', 'content': content})}\n\n"
+
+        snapshot = await workflow.aget_state(config)
+        pending_approval = get_pending_approval(snapshot)
+        if pending_approval is not None:
+            captured_final_state = snapshot.values or {}
+            yield (
+                "data: "
+                + json.dumps(
+                    {"type": "approval_required", "content": pending_approval}
+                )
+                + "\n\n"
+            )
 
     except Exception as exc:
         logger.error(f"Streaming Error on thread {payload.thread_id}: {str(exc)}", exc_info=True)

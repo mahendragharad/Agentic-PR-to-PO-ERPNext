@@ -10,10 +10,11 @@ import json
 import time
 import uuid
 from datetime import date
-from typing import AsyncGenerator, Dict, Generator, Optional, Tuple
+from typing import Any, AsyncGenerator, Dict, Generator, Optional, Tuple
 
 import httpx
 import streamlit as st
+from login_ import AUTH_COOKIE_NAME, clear_authentication, render_login_page
 
 # ---------------------------------------------------------------------
 # Configuration (backend contract unchanged)
@@ -197,6 +198,7 @@ html, body, [class*="css"]{
 .pill.ready{ background:var(--ok-soft); color:var(--ok); border-color:var(--ok-line); }
 .pill.ready::before{ animation:pulse-dot 1.8s infinite; }
 .pill.busy{ background:var(--accent-soft); color:var(--accent); border-color:var(--accent-line); }
+.pill.pending_approval{ background:var(--accent-soft); color:var(--accent); border-color:var(--accent-line); }
 .pill.err{ background:var(--bad-soft); color:var(--bad); border-color:var(--bad-line); }
 
 @keyframes pulse-dot{
@@ -912,18 +914,23 @@ st.markdown(BASE_CSS, unsafe_allow_html=True)
 # Session state — single source of truth
 # ---------------------------------------------------------------------
 ss = st.session_state
+ss.setdefault("erpnext_auth_cookie", None)
 ss.setdefault("thread_id", f"st_session_{uuid.uuid4()}")
 ss.setdefault("messages", [])
-ss.setdefault("user_id", "user_streamlit_client_01")
+ss.setdefault("user_id", None)
 ss.setdefault("pr_open", False)
 ss.setdefault("pending", None)       # one queue for chat, chips, form, retry
 ss.setdefault("last_request", None)
 ss.setdefault("health", "ready")     # ready | busy | err
+ss.setdefault("approval_pending", False)
+ss.setdefault("approval_payload", None)
+ss.setdefault("approval_error", None)
 
 
 def initiate_fresh_session() -> None:
     ss.thread_id = f"st_session_{uuid.uuid4()}"
     ss.messages, ss.pending, ss.last_request, ss.health = [], None, None, "ready"
+    ss.approval_pending, ss.approval_payload, ss.approval_error = False, None, None
 
 
 def set_pr_panel(is_open: bool) -> None:
@@ -942,8 +949,18 @@ def retry_last() -> None:
 
 
 def pill_html(state: str) -> str:
-    label = {"ready": "Ready", "busy": "Processing", "err": "Needs attention"}[state]
+    label = {
+        "ready": "Ready",
+        "busy": "Processing",
+        "pending_approval": "Review required",
+        "err": "Needs attention",
+    }[state]
     return f'<span class="pill {state}">{label}</span>'
+
+
+if not ss.erpnext_auth_cookie:
+    render_login_page()
+    st.stop()
 
 
 # ---------------------------------------------------------------------
@@ -954,6 +971,13 @@ with st.sidebar:
     pill_slot = st.empty()
     pill_slot.markdown(pill_html(ss.health), unsafe_allow_html=True)
     st.write("")
+
+    if ss.erpnext_auth_cookie:
+        st.success("ERPNext session connected")
+        if st.button("Log out", **FILL):
+            clear_authentication()
+            initiate_fresh_session()
+            st.rerun()
 
     st.button(
         "💬  Chat assistant", **FILL,
@@ -970,9 +994,11 @@ with st.sidebar:
     st.markdown("**Active thread**")
     st.markdown(f'<div class="thread-box">{ss.thread_id}</div>', unsafe_allow_html=True)
     st.write("")
-    if st.button("🔄  New session", **FILL):
+    if st.button("🔄  New session", disabled=ss.approval_pending, **FILL):
         initiate_fresh_session()
         st.rerun()
+    if ss.approval_pending:
+        st.caption("Resolve the pending purchase-order review before starting a new session.")
 
 # ---------------------------------------------------------------------
 # Manual PR drawer (always rendered so entered data survives open/close)
@@ -1151,10 +1177,19 @@ st.divider()
 # ---------------------------------------------------------------------
 # Backend streaming — async SSE → queue → sync generator with heartbeat
 # ---------------------------------------------------------------------
-async def _stream_backend(payload: dict, queue: "asyncio.Queue") -> None:
+async def _stream_backend(
+    payload: dict,
+    queue: "asyncio.Queue[Tuple[str, Any]]",
+    auth_cookie: str,
+) -> None:
     try:
         async with httpx.AsyncClient(timeout=120.0) as client:
-            async with client.stream("POST", FASTAPI_STREAM_URL, json=payload) as response:
+            async with client.stream(
+                "POST",
+                FASTAPI_STREAM_URL,
+                json=payload,
+                headers={"Cookie": f"{AUTH_COOKIE_NAME}={auth_cookie}"},
+            ) as response:
                 if response.status_code != 200:
                     body = (await response.aread()).decode(errors="ignore")[:300]
                     await queue.put(("error", f"Backend returned {response.status_code}. {body}"))
@@ -1174,6 +1209,8 @@ async def _stream_backend(payload: dict, queue: "asyncio.Queue") -> None:
                         await queue.put(("token", content))
                     elif kind == "error":
                         await queue.put(("error", str(content)))
+                    elif kind == "approval_required" and isinstance(content, dict):
+                        await queue.put(("approval", content))
                     elif kind in ("status", "tool", "tool_call", "node") and isinstance(content, str) and content:
                         await queue.put(("status", content))
     except httpx.TimeoutException:
@@ -1186,15 +1223,17 @@ async def _stream_backend(payload: dict, queue: "asyncio.Queue") -> None:
         await queue.put(("done", ""))
 
 
-async def _new_queue() -> "asyncio.Queue":
+async def _new_queue() -> "asyncio.Queue[Tuple[str, Any]]":
     return asyncio.Queue()
 
 
-def event_stream(payload: dict) -> Generator[Tuple[str, str], None, None]:
+def event_stream(payload: dict) -> Generator[Tuple[str, Any], None, None]:
     """Yields (kind, text): token | status | error | tick (heartbeat)."""
     loop = asyncio.new_event_loop()
     queue = loop.run_until_complete(_new_queue())
-    task = loop.create_task(_stream_backend(payload, queue))
+    task = loop.create_task(
+        _stream_backend(payload, queue, ss.erpnext_auth_cookie)
+    )
     try:
         while True:
             try:
@@ -1261,6 +1300,7 @@ def run_turn(req: Dict) -> None:
     pill_slot.markdown(pill_html("busy"), unsafe_allow_html=True)
 
     text, error, backend_note, stage, shown = "", None, None, 0, None
+    approval = None
     start = time.perf_counter()    
 
     with st.chat_message("assistant", avatar="🤖"):
@@ -1274,6 +1314,16 @@ def run_turn(req: Dict) -> None:
                 stage = 2
             elif kind == "status":
                 backend_note, stage = chunk, max(stage, 1)
+            elif kind == "approval":
+                approval = chunk
+                ss.approval_pending = True
+                ss.approval_payload = chunk
+                ss.approval_error = None
+                text = (
+                    f"Review required: **{chunk.get('action_label', 'purchase-order action')}**. "
+                    "Please review the document details before continuing."
+                )
+                break
             elif kind == "error":
                 error = chunk
                 break
@@ -1293,10 +1343,15 @@ def run_turn(req: Dict) -> None:
         status_ph.empty()
         if text:
             body_ph.markdown(text)
-        if not error and not text:
+        if not error and not text and approval is None:
             error = "The agent finished without returning a response."
 
-        if error:
+        if approval is not None:
+            meta = "⏸ Waiting for your review"
+            foot_ph.markdown(f'<div class="meta">{meta}</div>', unsafe_allow_html=True)
+            ss.health = "pending_approval"
+            ss.messages.append({"role": "assistant", "content": text, "meta": meta})
+        elif error:
             with foot_ph.container():
                 render_error(error)
             ss.health = "err"
@@ -1309,6 +1364,8 @@ def run_turn(req: Dict) -> None:
             ss.messages.append({"role": "assistant", "content": text, "meta": meta})
 
     pill_slot.markdown(pill_html(ss.health), unsafe_allow_html=True)
+    if approval is not None:
+        st.switch_page("pages/Approval.py")
 
 
 # ---------------------------------------------------------------------
@@ -1345,7 +1402,14 @@ if not ss.messages and not ss.pending:
 # ---------------------------------------------------------------------
 # Composer + dispatch (single pending queue drives every turn)
 # ---------------------------------------------------------------------
-if user_query := st.chat_input("Ask about requisitions, orders, or approvals…"):
+if ss.approval_pending:
+    st.warning("This conversation is paused until the purchase-order review is decided.")
+    st.page_link("pages/Approval.py", label="Open pending review", icon="🔒")
+
+if user_query := st.chat_input(
+    "Ask about requisitions, orders, or approvals…",
+    disabled=ss.approval_pending,
+):
     ask(user_query)
 
 if ss.pending:

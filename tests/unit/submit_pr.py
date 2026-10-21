@@ -11,13 +11,7 @@ from src.mcp_server.server import generate_material_request, submit_material_req
 
 def submit_po_():
     payload = {
-        "material_request_id" : "MAT-MR-2026-00044"
-    }
-
-    payload2 = {
-        "ctx": {
-            "material_request_id": "MAT-MR-2026-0001"
-            }
+        "material_request_id" : "MAT-MR-2026-00001"
     }
 
     submit_res = submit_material_request(ctx=payload)

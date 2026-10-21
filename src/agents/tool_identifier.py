@@ -4,7 +4,7 @@ from config.logging_config import logger
 from src.llm_client.groq_client import LLMProvider
 from langchain_core.messages import HumanMessage, SystemMessage
 
-def retrieve_relevant_tool_definitions(user_query: str, all_mcp_tools: list, config: dict) -> list:
+async def retrieve_relevant_tool_definitions(user_query: str, all_mcp_tools: list, config: dict) -> list:
     """
     Production-Grade Dynamic Tool Pruning Engine.
     Keeps the structural validation contract purely inside the class body expression.
@@ -61,7 +61,7 @@ def retrieve_relevant_tool_definitions(user_query: str, all_mcp_tools: list, con
     human_input = f"User Request: '{user_query}'\n\nAvailable System Tools:\n{tool_directory}"
     
     try:
-        selection = structured_retriever.invoke(
+        selection = await structured_retriever.ainvoke(
             [
                 SystemMessage(content=system_instruction),
                 HumanMessage(content=human_input)

@@ -6,3 +6,9 @@ class ChatRequest(BaseModel):
     thread_id: str = Field(..., json_schema_extra={"example": "user_session_abc_123"})
     user_id: Optional[str] = Field(default=None, json_schema_extra={"example": "user_42"})
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict)
+
+class ApprovalDecisionRequest(BaseModel):
+    thread_id: str
+    approval_id: str
+    preview_hash: str
+    decision: Literal["approved", "rejected"]

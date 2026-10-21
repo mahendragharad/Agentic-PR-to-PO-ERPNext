@@ -3,6 +3,7 @@ import json
 import copy
 from config.logging_config import logger
 from src.llm_client.groq_client import LLMProvider
+from langchain_core.runnables import RunnableConfig
 from src.state.agentState import AgentWorkflowState
 from typing import Dict, Any
 from src.prompt_library.agent_prompts import AgentPrompt_Library
@@ -16,7 +17,7 @@ except Exception as e:
     logger.critical(f"Failed to initialize Prompt Registry: {e}")
     raise e
 
-def orchestrator_agent_node(state: AgentWorkflowState, config: Dict[str, Any]) -> Dict[str, Any]:
+async def orchestrator_agent_node(state: AgentWorkflowState, config: RunnableConfig) -> Dict[str, Any]:
     conversation_history = state.get("messages", [])
     mcp_tools = config.get("configurable", {}).get("tools", [])
     llm = LLMProvider.get_conversational_engine()
@@ -73,7 +74,7 @@ def orchestrator_agent_node(state: AgentWorkflowState, config: Dict[str, Any]) -
 
     # --- 4. EXECUTION ---
     llm_with_mcp_tools = llm.bind_tools(mcp_tools)
-    ai_message = llm_with_mcp_tools.invoke(
+    ai_message = await llm_with_mcp_tools.ainvoke(
         active_payload_messages, 
         config={"callbacks": config.get("callbacks", [])}
     )

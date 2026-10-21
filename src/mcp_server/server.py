@@ -2,41 +2,56 @@ import json
 from datetime import date
 from config.settings import settings
 from mcp.server.fastmcp import FastMCP
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from config.logging_config import logger
 from typing import Dict, Any, List, Optional, Union
 from pydantic import ValidationError
 
 from src.erpnext_client.base_client import ERPNextBaseClient
 from src.auth.token_manager import ERPNextAuthorizationCodeManager
-from pydantic import BaseModel, Field, field_serializer, field_validator
+from pydantic import Field, field_serializer, field_validator
 from src.erpnext_client.pyload_schemas import MaterialRequestItemSchema, ConvertPRToPOInput, Purchase_Order_Id_Validator, Material_Request_Id_Validator, MaterialRequestDocSchema, CreateMaterialRequestInput
 from src.erpnext_client.exceptions import ERPNextAuthError, TokenCacheNotFoundError, InvalidCredentialsError 
-
+from src.mcp_server.dummy_api_client_service import AsyncERPNextService
 from mcp.types import TextContent, ImageContent, EmbeddedResource
-
+# 1. Initialize the client service
+import os
 logger.info("--Initialize FastMCP Server--")
 mcp = FastMCP(
     name="ERPNext-Core-Engine",
-    instructions="Use this server to read and write data across ERPNext modules.",
+    instructions=(
+        "Use this server to read and write data across ERPNext modules. "
+        "Never ask for or generate an ERPNext session ID. Agent integrations "
+        "inject it from authenticated request context. Direct trusted MCP "
+        "clients must pass erpnext_sid as a tool argument; do not put it in "
+        "user-facing prompts or conversation history."
+    ),
     host="0.0.0.0",    
     port=8000,
     stateless_http=True,
 )
 
-logger.info("🧬 Dependency Initialization Block")
-logger.info("Wire up your working, production-ready core components")
-token_manager = ERPNextAuthorizationCodeManager(
-        token_url=settings.token_url,
-        client_id=settings.erpnext_client_id,
-        client_secret=settings.erpnext_client_secret,
-        cache_file=settings.absolute_token_path,
-        scope=settings.erpnext_scope
-    )
+# logger.info("🧬 Dependency Initialization Block")
+# logger.info("Wire up your working, production-ready core components")
+# token_manager = ERPNextAuthorizationCodeManager(
+#         token_url=settings.token_url,
+#         client_id=settings.erpnext_client_id,
+#         client_secret=settings.erpnext_client_secret,
+#         cache_file=settings.absolute_token_path,
+#         scope=settings.erpnext_scope
+#     )
 
-client = ERPNextBaseClient(
-    base_url=str(settings.erpnext_base_url), 
-    token_manager=token_manager
-)
+# client = ERPNextBaseClient(
+#     base_url=str(settings.erpnext_base_url), 
+#     token_manager=token_manager
+# )
+
+# 2. FIX: Set this back to your actual ERPNext application URL, not the infrastructure host
+REAL_ERPNEXT_URL = os.getenv("ERPNEXT_BASE_URL")
+client = AsyncERPNextService(base_url=REAL_ERPNEXT_URL)
 
 def format_tool_response(success: bool, action: str, data: Any = None, error_details: Optional[str] = None) -> str:
     """
@@ -57,7 +72,7 @@ def format_tool_response(success: bool, action: str, data: Any = None, error_det
     return json.dumps(response, indent=2)
 
 @mcp.tool()
-def generate_material_request(doc : MaterialRequestDocSchema) -> str :
+async def generate_material_request(doc : MaterialRequestDocSchema, erpnext_sid: Optional[str] = None) -> str :
     """
     Creates a new Material Request / Purchase Request in ERPNext using the provided item, quantity, pricing, company, warehouse, and date details.
     """
@@ -85,7 +100,7 @@ def generate_material_request(doc : MaterialRequestDocSchema) -> str :
 
         logger.info(f"-- Payload validation completed to generate the Purchase / Material Request--")
         endpoint = "api/method/frappe.client.insert"
-        raw_response = client.request("POST", endpoint, json=validated_po_payload)
+        raw_response = await client.request("POST", endpoint, json=validated_po_payload, erpnext_sid=erpnext_sid)
 
         if not raw_response:
             raise ValueError(f"ERPNext core mapping engine returned an empty data structure while creating PR/MR request.")
@@ -121,7 +136,7 @@ def generate_material_request(doc : MaterialRequestDocSchema) -> str :
         return format_tool_response(success=False, action=action_name, error_details=err_msg)
 
 @mcp.tool()
-def submit_material_request(material_request_id : str) -> str :
+async def submit_material_request(material_request_id : str, erpnext_sid: Optional[str] = None) -> str :
     """
     Submits an existing Draft Material Request (Purchase Requisition) in ERPNext by its unique document Name/ID.
     Transitions docstatus from 0 (Draft) to 1 (Submitted).
@@ -137,7 +152,7 @@ def submit_material_request(material_request_id : str) -> str :
         
         logger.info(f"Let's validate the PR _id before submitting it : {pr_name}")
         logger.info(f"Retrieving current draft structure for document: {pr_name}")
-        draft_doc = client.request("GET", f"api/resource/Material Request/{pr_name}")
+        draft_doc = await client.request("GET", f"api/resource/Material Request/{pr_name}", erpnext_sid=erpnext_sid)
         doc_payload = draft_doc.get("data")
 
         if not doc_payload :
@@ -161,7 +176,7 @@ def submit_material_request(material_request_id : str) -> str :
         logger.info(f"Dispatching signed submission command payload to ERPNext for {pr_name}...")
 
         endpoint = f"api/resource/Material Request/{pr_name}"
-        raw_response = client.request("PUT", endpoint, json={"docstatus" : 1})
+        raw_response = await client.request("PUT", endpoint, json={"docstatus" : 1}, erpnext_sid=erpnext_sid)
 
         return format_tool_response(
             success=True,
@@ -180,7 +195,12 @@ def submit_material_request(material_request_id : str) -> str :
         )
 
 @mcp.tool()
-def convert_pr_to_draft_po(material_request_id : str, supplier : str, currency : str) -> str :
+async def convert_pr_to_draft_po(
+    material_request_id: str,
+    supplier: str,
+    currency: str,
+    erpnext_sid: Optional[str] = None,
+) -> str:
     """
     Converts a submitted ERPNext Material Request (PR) into a fresh, saved Draft Purchase Order.
     Enforces strict pre-flight docstatus check gates to prevent engine process crashes.
@@ -196,19 +216,22 @@ def convert_pr_to_draft_po(material_request_id : str, supplier : str, currency :
 
     try :
         logger.info(f"Executing safety pre-flight check on document: {pr_id}")
-        raw_pr_response = client.request("GET", f"api/resource/Material Request/{pr_id}")
+        raw_pr_response = await client.request(
+            "GET",
+            f"api/resource/Material Request/{pr_id}",
+            erpnext_sid=erpnext_sid,
+        )
         pr_data = raw_pr_response.get("data", {})
 
         if not pr_data:
             raise ValueError(f"ERPNext core mapping engine returned an empty data structure for {pr_id}.")
 
         items_data = pr_data.get("items", [])
+        items_data = items_data[0]
         pr_status = pr_data.get("status")
         
-        # Guard clause against empty items array before index access
         if not items_data:
             raise ValueError(f"ERPNext core mapping engine returned no items for {pr_id}.")
-        items = items_data[0]
 
         if not pr_status:
             raise ValueError(f"ERPNext core mapping engine returned an empty status structure for {pr_id}.")
@@ -246,7 +269,12 @@ def convert_pr_to_draft_po(material_request_id : str, supplier : str, currency :
         mapper_endpoint = "api/method/erpnext.stock.doctype.material_request.material_request.make_purchase_order"
         logger.info(f"Dispatching POST conversion map request to RPC endpoint for {pr_id}...")
 
-        mapper_response = client.request("POST",  endpoint=mapper_endpoint, json = {"source_name" : pr_id})
+        mapper_response = await client.request(
+            "POST",
+            endpoint=mapper_endpoint,
+            json={"source_name": pr_id},
+            erpnext_sid=erpnext_sid,
+        )
         po_mapped_structure = mapper_response.get("message", {})
 
         if not po_mapped_structure:
@@ -255,18 +283,33 @@ def convert_pr_to_draft_po(material_request_id : str, supplier : str, currency :
         save_point = "api/resource/Purchase Order"
         logger.info("Persisting unsaved mapped document matrix to database as an official Draft Purchase Order...")
 
-        logger.info("Validating the material request payload to convert it into the PO")
-        processed_items = [
-                 {
-                    "item_code" : items.get("item_code"),
-                    "qty" : items.get("qty"),
-                    "uom" : items.get("uom"),
-                    "rate" : items.get("rate"),
-                    "warehouse" : items.get("warehouse"),
-                    "material_request" : pr_data.get("name"),
-                    "material_request_item" : items.get("name")
-                }
-            ]
+        logger.info("Validating all mapped Material Request lines for the PO")
+        # mapped_items = po_mapped_structure.get("items") or items_data
+        # processed_items = []
+        # for item in mapped_items:
+        #     processed_item = dict(item)
+        #     for internal_field in (
+        #         "name", "parent", "parentfield", "parenttype", "idx",
+        #         "__islocal", "__unsaved",
+        #     ):
+        #         processed_item.pop(internal_field, None)
+        #     processed_item["material_request"] = pr_data.get("name")
+        #     processed_item["material_request_item"] = (
+        #         processed_item.get("material_request_item") or item.get("name")
+        #     )
+        #     processed_items.append(processed_item)
+
+        items_data = [
+            {
+                "item_code": items_data.get("item_code", {}),
+                "qty": items_data.get("qty", {}),
+                "uom": items_data.get("uom", {}),
+                "rate": items_data.get("rate", {}),
+                "warehouse": items_data.get("warehouse", {}),
+                "material_request": pr_id,
+                "material_request_item": items_data.get("name", {})
+            }
+        ]
 
         po_payload = {
                 "doctype": "Purchase Order",
@@ -277,11 +320,20 @@ def convert_pr_to_draft_po(material_request_id : str, supplier : str, currency :
                 "supplier": supplier,
                 "currency": currency,
                 "buying_price_list": pr_data.get("buying_price_list", {}),
-                "set_warehouse": pr_data.get("set_warehouse", {}),
-                "items": processed_items
+                "items": items_data
             }
 
-        saved_po_data = client.request("POST", endpoint=save_point, json=po_payload)
+
+        print("=="*10)
+        print(po_payload)
+        print("=="*10)
+
+        saved_po_data = await client.request(
+            "POST",
+            endpoint=save_point,
+            json=po_payload,
+            erpnext_sid=erpnext_sid,
+        )
         if not saved_po_data:
             raise ValueError(f"ERPNext core mapping engine returned an empty data structure for {pr_id}.")
 
@@ -312,7 +364,10 @@ def convert_pr_to_draft_po(material_request_id : str, supplier : str, currency :
         )
 
 @mcp.tool()
-def submit_purchase_order(purchase_order_id : str) :
+async def submit_purchase_order(
+    purchase_order_id: str,
+    erpnext_sid: Optional[str] = None,
+) -> str:
     """
     Converts a submitted ERPNext draft Purchase order (PO) into a fresh final Purchase Order.
     Enforces strict pre-flight docstatus check gates to prevent engine process crashes.
@@ -327,16 +382,20 @@ def submit_purchase_order(purchase_order_id : str) :
 
         logger.info(f"MCP Tool Triggered: {action_name} | Target Source PR: {po_id}")
         logger.info(f"Executing safety pre-flight check on po_id: {po_id}")
-        po_response = client.request("GET", f"api/resource/Purchase Order/{po_id}")
+        po_response = await client.request(
+            "GET",
+            f"api/resource/Purchase Order/{po_id}",
+            erpnext_sid=erpnext_sid,
+        )
         po_response = po_response.get("data", {})
 
         if not po_response:
             raise ValueError(f"ERPNext core mapping engine returned an empty data structure for {po_id}.")
 
-        if po_response.get("docstatus", {}) == 1 :
+        if po_response.get("docstatus") != 0:
             err_msg = (
-                f"Transformation Blocked: The Purchase Order '{po_id}' is Already Submitted (docstatus 1). "
-                "ERPNext backend mapping engines cannot resubmit this resource document."
+                f"Transformation Blocked: Purchase Order '{po_id}' is not in draft status "
+                f"(docstatus: {po_response.get('docstatus')}). Only draft purchase orders can be submitted."
             )
 
             return format_tool_response(
@@ -347,7 +406,12 @@ def submit_purchase_order(purchase_order_id : str) :
 
         logger.info(f"Executing Final API Call To Convert {po_id} from draft to Final PO")
         endpoint = f"api/resource/Purchase Order/{po_id}"
-        po_response = client.request("PUT", endpoint=endpoint, json={"docstatus": 1})
+        po_response = await client.request(
+            "PUT",
+            endpoint=endpoint,
+            json={"docstatus": 1},
+            erpnext_sid=erpnext_sid,
+        )
 
         return format_tool_response(
             success=True,
@@ -370,7 +434,10 @@ def submit_purchase_order(purchase_order_id : str) :
         )
     
 @mcp.tool() 
-def cancel_purchase_order(purchase_order_id : str) :
+async def cancel_purchase_order(
+    purchase_order_id: str,
+    erpnext_sid: Optional[str] = None,
+) -> str:
     """
     Cancels an ERPNext Purchase Order (PO) only after strict pre-flight validation.
     Enforces docstatus and eligibility checks to prevent deletion of submitted or otherwise non-deletable POs and avoid engine process failures.
@@ -386,7 +453,11 @@ def cancel_purchase_order(purchase_order_id : str) :
         
         logger.info(f"Executing safety pre-flight check on po_id: {po_id}")
         logger.info("Fetching the PO details for validation")
-        po_response = client.request("GET", f"api/resource/Purchase Order/{po_id}")
+        po_response = await client.request(
+            "GET",
+            f"api/resource/Purchase Order/{po_id}",
+            erpnext_sid=erpnext_sid,
+        )
         po_response = po_response.get("data", {})
 
         if not po_response:
@@ -405,7 +476,12 @@ def cancel_purchase_order(purchase_order_id : str) :
             )
 
         logger.info(f"Applying Final API Call To Cancel The Purchase Order with PO Id {po_id}")
-        po_response = client.request("PUT", f"api/resource/Purchase Order/{po_id}", json={"docstatus" : 2})
+        po_response = await client.request(
+            "PUT",
+            f"api/resource/Purchase Order/{po_id}",
+            json={"docstatus": 2},
+            erpnext_sid=erpnext_sid,
+        )
         po_response = po_response.get("data", {})
 
         if not po_response:
@@ -427,7 +503,10 @@ def cancel_purchase_order(purchase_order_id : str) :
         )
 
 @mcp.tool() 
-def delete_purchase_order(purchase_order_id : str) :
+async def delete_purchase_order(
+    purchase_order_id: str,
+    erpnext_sid: Optional[str] = None,
+) -> str:
     """
     Deletes an ERPNext Purchase Order (PO) only after strict pre-flight validation.
     Enforces docstatus and eligibility checks to prevent deletion of submitted or otherwise non-deletable POs and avoid engine process failures.
@@ -443,7 +522,11 @@ def delete_purchase_order(purchase_order_id : str) :
 
         logger.info(f"MCP Tool Triggered: {action_name} | Target Source PR: {po_id}")
         logger.info(f"Executing safety pre-flight check on po_id: {po_id}")
-        po_response = client.request("GET", f"api/resource/Purchase Order/{po_id}")
+        po_response = await client.request(
+            "GET",
+            f"api/resource/Purchase Order/{po_id}",
+            erpnext_sid=erpnext_sid,
+        )
         po_response = po_response.get("data", {})
 
         if not po_response:
@@ -462,7 +545,11 @@ def delete_purchase_order(purchase_order_id : str) :
             )
 
         logger.info(f"Applying Final API Call - To Delete The PO - {po_id}")
-        po_response = client.request("DELETE", f"api/resource/Purchase Order/{po_id}")
+        po_response = await client.request(
+            "DELETE",
+            f"api/resource/Purchase Order/{po_id}",
+            erpnext_sid=erpnext_sid,
+        )
         po_response = po_response.get("data", {})
 
         if not po_response:
@@ -485,7 +572,10 @@ def delete_purchase_order(purchase_order_id : str) :
 
 
 @mcp.tool()
-def get_material_request_details(material_request_id : str) :
+async def get_material_request_details(
+    material_request_id: str,
+    erpnext_sid: Optional[str] = None,
+):
     """
     Retrieves complete Purchase Requisition (PR) / Material Request details from ERPNext using the specified PR identifier.
     Performs pre-flight validation to ensure the requested PR exists and returns structured PR data, including request metadata and line items, for downstream agent processing and workflow decisions.
@@ -499,7 +589,11 @@ def get_material_request_details(material_request_id : str) :
             return format_tool_response(success=False, action=action_name, error_details=err_msg)
 
         logger.info(f"MCP Tool Triggered: {action_name} | Target Source PR: {pr_id}")
-        pr_response = client.request("GET", f"api/resource/Material Request/{pr_id}")
+        pr_response = await client.request(
+            "GET",
+            f"api/resource/Material Request/{pr_id}",
+            erpnext_sid=erpnext_sid,
+        )
 
         if not pr_response:
             raise ValueError(f"ERPNext core mapping engine returned an empty data structure for {pr_id}.")
@@ -509,6 +603,8 @@ def get_material_request_details(material_request_id : str) :
         response_to_return = {
                 "name": message.get("name", ""),
                 "title": message.get("title", ""),
+                "remark": message.get("remark", ""),
+                "department": message.get("department", ""),
                 "material_request_type": message.get("material_request_type", ""),
                 "company": message.get("company", ""),
                 "docstatus": message.get("docstatus", 0),
@@ -553,7 +649,10 @@ def get_material_request_details(material_request_id : str) :
         )
 
 @mcp.tool()
-def get_purchase_order_details(purchase_order_id : str) :
+async def get_purchase_order_details(
+    purchase_order_id: str,
+    erpnext_sid: Optional[str] = None,
+):
     """
     Retrieves complete Purchase Order (PO) details from ERPNext using the specified PO identifier.
     Performs pre-flight validation to ensure the requested PO exists and returns structured PO data for downstream agent processing and workflow decisions.
@@ -567,7 +666,11 @@ def get_purchase_order_details(purchase_order_id : str) :
             return format_tool_response(success=False, action=action_name, error_details=err_msg)
 
         logger.info(f"MCP Tool Triggered: {action_name} | Target Source PR: {po_id}")
-        po_response = client.request("GET", f"api/resource/Purchase Order/{po_id}")
+        po_response = await client.request(
+            "GET",
+            f"api/resource/Purchase Order/{po_id}",
+            erpnext_sid=erpnext_sid,
+        )
 
         if not po_response:
             raise ValueError(f"ERPNext core mapping engine returned an empty data structure for {po_id}.")
@@ -590,6 +693,18 @@ def get_purchase_order_details(purchase_order_id : str) :
             "total_qty": message.get("total_qty", 0),
             "total": message.get("total", 0),
             "grand_total": message.get("grand_total", 0),
+            "total_taxes_and_charges": message.get("total_taxes_and_charges", 0),
+            "taxes": [
+                {
+                    "charge_type": tax.get("charge_type", ""),
+                    "account_head": tax.get("account_head", ""),
+                    "description": tax.get("description", ""),
+                    "rate": tax.get("rate", 0),
+                    "tax_amount": tax.get("tax_amount", 0),
+                    "total": tax.get("total", 0),
+                }
+                for tax in message.get("taxes", [])
+            ],
             "per_billed": message.get("per_billed", 0),
             "per_received": message.get("per_received", 0),
             "items": [
@@ -636,4 +751,3 @@ if __name__ == "__main__":
         transport="streamable-http",
         mount_path="/mcp",
     )
-
