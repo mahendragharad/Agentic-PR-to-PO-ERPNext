@@ -44,10 +44,6 @@ class AppSettings(BaseSettings):
     LANGFUSE_BASE_URL : str = Field(..., alias="LANGFUSE_BASE_URL")
     BASE_API_URL : str = Field(..., alias="BASE_API_URL")
 
-    LOGIN_URL : str = f"{BASE_API_URL}/api/v2/user/auth/login"
-    FASTAPI_STREAM_URL : str = f"{BASE_API_URL}/api/v1/chat/stream"
-    RESUME_URL : str = f"{BASE_API_URL}/api/v1/chat/resume"
-
     # ---------------------------------------------------------
     # 5. Configuration Metadata Layer
     # ---------------------------------------------------------
