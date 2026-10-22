@@ -15,11 +15,12 @@ from typing import Any, AsyncGenerator, Dict, Generator, Optional, Tuple
 import httpx
 import streamlit as st
 from login_ import AUTH_COOKIE_NAME, clear_authentication, render_login_page
-
+from config.settings import settings
 # ---------------------------------------------------------------------
 # Configuration (backend contract unchanged)
 # ---------------------------------------------------------------------
-FASTAPI_STREAM_URL = "http://127.0.0.1:8001/api/v1/chat/stream"
+BASE_API_URL = settings.BASE_API_URL
+FASTAPI_STREAM_URL = f"{BASE_API_URL}/api/v1/chat/stream"
 DEPARTMENTS = ["IT", "Sales", "HR", "Finance", "Operations"]
 UOMS = ["Nos", "Kg", "Box", "Set", "Litre", "Meter"]
 

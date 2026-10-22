@@ -199,6 +199,91 @@ def truncate_erpnext_payload(content: str, max_chars: int = 1500) -> str:
         return content[:max_chars] + "\n... [Remaining payload output truncated to save system memory] ..."
     return content
 
+
+def _normalize_pr_to_po_error(content: str) -> str:
+    try:
+        response = json.loads(content)
+    except json.JSONDecodeError:
+        return content
+
+    if not isinstance(response, dict) or str(response.get("status", "")).upper() != "ERROR":
+        return content
+
+    error = response.get("error")
+    if not isinstance(error, dict) or not isinstance(error.get("message"), str):
+        return content
+
+    message = error["message"].strip()
+    prefix = "ERPNext server failed to convert Material Request to the PO Draft:"
+    if prefix in message:
+        message = message.split(prefix, 1)[1].strip()
+
+    http_error = re.search(r"ERPNext API returned unexpected error (\d+):\s*", message)
+    if http_error:
+        status_code = http_error.group(1)
+        try:
+            response_body = json.loads(message[http_error.end():])
+        except json.JSONDecodeError:
+            message = f"ERPNext rejected the draft purchase order request (HTTP {status_code})."
+        else:
+            if not isinstance(response_body, dict):
+                message = f"ERPNext rejected the draft purchase order request (HTTP {status_code})."
+            else:
+                detail = response_body.get("exception")
+                if isinstance(detail, str) and detail.strip():
+                    message = detail.split(":", 1)[-1].splitlines()[0].strip()
+                else:
+                    server_messages = response_body.get("_server_messages")
+                    if isinstance(server_messages, str):
+                        try:
+                            server_messages = json.loads(server_messages)
+                        except json.JSONDecodeError:
+                            server_messages = []
+
+                    found_server_message = False
+                    if isinstance(server_messages, list):
+                        for server_message in server_messages:
+                            if isinstance(server_message, str):
+                                try:
+                                    server_message = json.loads(server_message)
+                                except json.JSONDecodeError:
+                                    continue
+                            if isinstance(server_message, dict) and isinstance(
+                                server_message.get("message"), str
+                            ):
+                                message = re.sub(
+                                    r"\s+", " ",
+                                    re.sub(
+                                        r"<[^>]*>",
+                                        " ",
+                                        server_message["message"],
+                                    ),
+                                ).strip()
+                                found_server_message = True
+                                break
+                    if not found_server_message:
+                        message = f"ERPNext rejected the draft purchase order request (HTTP {status_code})."
+
+    missing_link = re.fullmatch(
+        r"Could not find\s+(.+?):\s*(.+)",
+        message,
+        flags=re.IGNORECASE,
+    )
+    if missing_link:
+        entity, value = missing_link.groups()
+        entity = entity.strip()
+        message = (
+            f"{entity} '{value.strip()}' was not found in ERPNext. "
+            f"Check the {entity.lower()} name and try again."
+        )
+
+    if len(message) > 900:
+        message = message[:897].rstrip() + "..."
+
+    error["message"] = message
+    return json.dumps(response, ensure_ascii=False)
+
+
 def create_safe_mcp_execution_node(mcp_tools: list):
     """
     Closure Factory creating a production-hardened LangGraph Safe Execution Node.
@@ -394,9 +479,10 @@ def create_safe_mcp_execution_node(mcp_tools: list):
             last_res = emitted_messages[-1]
             
             # Apply token payload compression guardrails before appending to history state
-            last_res.content = truncate_erpnext_payload(
-                extract_tool_text(last_res.content)
-            )
+            tool_content = extract_tool_text(last_res.content)
+            if tool_name == "convert_pr_to_draft_po":
+                tool_content = _normalize_pr_to_po_error(tool_content)
+            last_res.content = truncate_erpnext_payload(tool_content)
             
             tool_response = parse_tool_response(last_res.content)
             status = str(tool_response.get("status", "")).upper()

@@ -1,10 +1,11 @@
 import hashlib
 import time
-
 import httpx
 import streamlit as st
+from config.settings import settings
 
-LOGIN_URL = "http://127.0.0.1:8001/api/v2/user/auth/login"
+BASE_API_URL = settings.BASE_API_URL
+LOGIN_URL = f"{BASE_API_URL}/api/v2/user/auth/login"
 AUTH_COOKIE_NAME = "erpnext_auth_token"
 
 

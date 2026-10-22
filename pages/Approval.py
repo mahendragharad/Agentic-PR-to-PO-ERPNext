@@ -1,9 +1,10 @@
 import json
-
 import httpx
 import streamlit as st
+from config.settings import settings
 
-RESUME_URL = "http://127.0.0.1:8001/api/v1/chat/resume"
+BASE_API_URL = settings.BASE_API_URL
+RESUME_URL = f"{BASE_API_URL}/api/v1/chat/resume"
 AUTH_COOKIE_NAME = "erpnext_auth_token"
 
 st.set_page_config(
