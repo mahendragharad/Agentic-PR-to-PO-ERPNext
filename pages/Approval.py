@@ -1,9 +1,17 @@
 import json
+import os
 import httpx
 import streamlit as st
 from config.settings import settings
+from dotenv import load_dotenv
 
-BASE_API_URL = settings.BASE_API_URL
+load_dotenv()
+
+BASE_API_URL = st.secrets.get("BASE_API_URL") or os.getenv("BASE_API_URL")
+if not BASE_API_URL:
+    raise RuntimeError("Configure BASE_API_URL in Streamlit secrets or the environment.")
+
+BASE_API_URL = str(BASE_API_URL).rstrip("/")
 RESUME_URL = f"{BASE_API_URL}/api/v1/chat/resume"
 AUTH_COOKIE_NAME = "erpnext_auth_token"
 

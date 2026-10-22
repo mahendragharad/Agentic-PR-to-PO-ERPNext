@@ -15,11 +15,19 @@ from typing import Any, AsyncGenerator, Dict, Generator, Optional, Tuple
 import httpx
 import streamlit as st
 from login_ import AUTH_COOKIE_NAME, clear_authentication, render_login_page
-from config.settings import settings
 # ---------------------------------------------------------------------
 # Configuration (backend contract unchanged)
 # ---------------------------------------------------------------------
-BASE_API_URL = settings.BASE_API_URL
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_API_URL = st.secrets.get("BASE_API_URL") or os.getenv("BASE_API_URL")
+if not BASE_API_URL:
+    raise RuntimeError("Configure BASE_API_URL in Streamlit secrets or the environment.")
+
+BASE_API_URL = str(BASE_API_URL).rstrip("/")
 FASTAPI_STREAM_URL = f"{BASE_API_URL}/api/v1/chat/stream"
 DEPARTMENTS = ["IT", "Sales", "HR", "Finance", "Operations"]
 UOMS = ["Nos", "Kg", "Box", "Set", "Litre", "Meter"]
