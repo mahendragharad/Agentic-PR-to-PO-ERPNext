@@ -173,7 +173,7 @@ st.title("Purchase Order Approval")
 
 if not ss.erpnext_auth_cookie:
     st.warning("Your ERPNext session is missing. Return to chat and log in again.")
-    st.page_link("streamlit_app.py", label="Return to chat", icon="💬")
+    st.page_link("app.py", label="Return to chat", icon="💬")
     st.stop()
 
 for message in ss.messages[-6:]:
@@ -182,7 +182,7 @@ for message in ss.messages[-6:]:
 
 if not ss.approval_pending or not isinstance(ss.approval_payload, dict):
     st.info("There is no purchase-order approval waiting for a decision.")
-    st.page_link("streamlit_app.py", label="Return to chat", icon="💬")
+    st.page_link("app.py", label="Return to chat", icon="💬")
     st.stop()
 
 approval_payload = ss.approval_payload
