@@ -4,16 +4,7 @@ import time
 import httpx
 import streamlit as st
 
-import streamlit as st
-
-# Automatically checks Streamlit Secrets in the cloud, falls back to local host for offline testing
-BASE_API_URL = st.secrets.get("BACKEND_API_URL", "http://127.0.0.1:8001")
-
-# Dynamically builds the final production routing path
-LOGIN_URL = f"{BASE_API_URL}/api/v2/user/auth/login"
-
-
-# LOGIN_URL = "http://127.0.0.1:8001/api/v2/user/auth/login"
+LOGIN_URL = "http://127.0.0.1:8001/api/v2/user/auth/login"
 AUTH_COOKIE_NAME = "erpnext_auth_token"
 
 

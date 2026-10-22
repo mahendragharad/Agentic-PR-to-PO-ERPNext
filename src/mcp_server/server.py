@@ -15,7 +15,7 @@ from src.auth.token_manager import ERPNextAuthorizationCodeManager
 from pydantic import Field, field_serializer, field_validator
 from src.erpnext_client.pyload_schemas import MaterialRequestItemSchema, ConvertPRToPOInput, Purchase_Order_Id_Validator, Material_Request_Id_Validator, MaterialRequestDocSchema, CreateMaterialRequestInput
 from src.erpnext_client.exceptions import ERPNextAuthError, TokenCacheNotFoundError, InvalidCredentialsError 
-from src.mcp_server.dummy_api_client_service import AsyncERPNextService
+from src.auth.erp_next_auth import AsyncERPNextService
 from mcp.types import TextContent, ImageContent, EmbeddedResource
 # 1. Initialize the client service
 import os

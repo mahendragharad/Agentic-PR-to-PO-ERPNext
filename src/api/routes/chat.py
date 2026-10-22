@@ -7,7 +7,7 @@ from config.logging_config import logger
 from src.api.endpoint_schemas import ApprovalDecisionRequest, ChatRequest
 from src.api.dependencies import get_agent_workflow, get_mcp_tools
 from src.api.event_stream_generator import event_stream_generator
-from src.mcp_server.dummy_api_client_service import (
+from src.auth.erp_next_auth import (
     AsyncERPNextService,
     get_authenticated_erp_service,
 )

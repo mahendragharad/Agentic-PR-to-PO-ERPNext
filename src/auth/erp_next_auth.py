@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 import jwt
 import httpx
+from config.logging_config import logger
 
 # =====================================================================
 # 1. GLOBAL PRODUCTION SETTINGS & ENVIRONMENT CONFIGURATION
@@ -60,11 +61,10 @@ class AsyncERPNextService:
                 response.raise_for_status()
                 return response.json()
             except httpx.HTTPStatusError as e:
-                if e.response.status_code == 401:
-                    raise HTTPException(status_code=401, detail="ERPNext session context expired or invalid.")
-                raise HTTPException(status_code=e.response.status_code, detail=f"ERPNext Error: {e.response.text}")
-            except httpx.RequestError as e:
-                raise HTTPException(status_code=503, detail=f"ERPNext gateway unreachable: {str(e)}")
+                if response.status_code == 401:
+                    logger.error("ERPNext rejected credentials with 401 Unauthorized.")
+                    raise PermissionError("ERPNext rejected credentials with 401 Unauthorized.") from e
+                raise RuntimeError(f"ERPNext API returned unexpected error {response.status_code}: {response.text}") from e
 
 # =====================================================================
 # 3. CORE SECURITY HELPER FUNCTIONS

@@ -19,17 +19,7 @@ from login_ import AUTH_COOKIE_NAME, clear_authentication, render_login_page
 # ---------------------------------------------------------------------
 # Configuration (backend contract unchanged)
 # ---------------------------------------------------------------------
-
-import streamlit as st
-
-# Automatically checks Streamlit Secrets in the cloud, falls back to local host for offline testing
-BASE_API_URL = st.secrets.get("BACKEND_API_URL", "http://127.0.0.1:8001")
-
-# Dynamically builds the streaming channel target
-FASTAPI_STREAM_URL = f"{BASE_API_URL}/api/v1/chat/stream"
-
-
-# FASTAPI_STREAM_URL = "http://127.0.0.1:8001/api/v1/chat/stream"
+FASTAPI_STREAM_URL = "http://127.0.0.1:8001/api/v1/chat/stream"
 DEPARTMENTS = ["IT", "Sales", "HR", "Finance", "Operations"]
 UOMS = ["Nos", "Kg", "Box", "Set", "Litre", "Meter"]
 

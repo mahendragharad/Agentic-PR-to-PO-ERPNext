@@ -110,7 +110,7 @@ def submit_decision(decision: str) -> None:
             ss.approval_payload = None
             ss.approval_error = None
             ss.health = "ready"
-            st.switch_page("streamlit_app.py")
+            st.switch_page("app.py")
 
         elif status == "rejected":
             po_id = result.get("po_id") or result.get("document_id")
@@ -124,7 +124,7 @@ def submit_decision(decision: str) -> None:
             ss.approval_payload = None
             ss.approval_error = None
             ss.health = "ready"
-            st.switch_page("streamlit_app.py")
+            st.switch_page("app.py")
 
         elif status == "stale_review":
             append_assistant_message(
@@ -134,7 +134,7 @@ def submit_decision(decision: str) -> None:
             ss.approval_payload = None
             ss.approval_error = None
             ss.health = "ready"
-            st.switch_page("streamlit_app.py")
+            st.switch_page("app.py")
 
         elif status == "failed":
             action_result = result.get("action_result")
@@ -149,7 +149,7 @@ def submit_decision(decision: str) -> None:
             ss.approval_payload = None
             ss.approval_error = None
             ss.health = "err"
-            st.switch_page("streamlit_app.py")
+            st.switch_page("app.py")
 
         else:
             raise ValueError(f"Unexpected backend approval status: {status!r}.")

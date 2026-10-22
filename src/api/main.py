@@ -75,8 +75,7 @@ async def lifespan(app: FastAPI):
             env=env_context,
         )
 
-        await _wait_for_mcp_server(mcp_process)
-            
+        await _wait_for_mcp_server(mcp_process)     
         logger.info("MCP Server is accepting connections on port 8000.")
 
         # Trigger client orchestration handshake
