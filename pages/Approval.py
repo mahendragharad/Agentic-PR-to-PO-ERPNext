@@ -2,7 +2,6 @@ import json
 import os
 import httpx
 import streamlit as st
-from config.settings import settings
 from dotenv import load_dotenv
 
 load_dotenv()
